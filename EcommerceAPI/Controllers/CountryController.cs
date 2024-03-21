@@ -55,7 +55,7 @@ public class CountryController(ICountryService countryService) : ControllerBase
     {
         try
         {
-            await _countryService.CreateAsync(country);
+            await _countryService.AddAsync(country);
             return Ok();
         }
         catch (Exception)

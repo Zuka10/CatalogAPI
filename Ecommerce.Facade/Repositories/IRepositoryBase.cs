@@ -23,5 +23,4 @@ public interface IRepositoryBase<TEntity>
     Task DeleteAsync(TEntity entity);
     Task<IEnumerable<TEntity>> SetAsync(Expression<Func<TEntity, bool>> predicate);
     Task<IEnumerable<TEntity>> SetAsync();
-
 }

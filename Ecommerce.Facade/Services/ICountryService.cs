@@ -11,7 +11,7 @@ public interface ICountryService
     IEnumerable<Country> GetAll();
     //Async methods
     Task<Country> GetByIdAsync(int id);
-    Task CreateAsync(Country country);
+    Task AddAsync(Country country);
     Task<bool> UpdateAsync(int id, Country country);
     Task<bool> DeleteAsync(int id);
     Task<IEnumerable<Country>> GetAllAsync();

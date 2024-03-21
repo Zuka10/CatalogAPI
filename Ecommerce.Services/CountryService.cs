@@ -50,7 +50,7 @@ public class CountryService(IUnitOfWork unitOfWork) : ICountryService
         return await _unitOfWork.CountryRepository.GetAsync(id);
     }
 
-    public async Task CreateAsync(Country country)
+    public async Task AddAsync(Country country)
     {
         await _unitOfWork.CountryRepository.InsertAsync(country);
         await _unitOfWork.SaveChangesAsync();
