@@ -78,6 +78,7 @@ public class CountryService(IUnitOfWork unitOfWork) : ICountryService
         if (country is not null)
         {
             await _unitOfWork.CountryRepository.DeleteAsync(id);
+            await _unitOfWork.SaveChangesAsync();
             return true;
         }
         return false;
