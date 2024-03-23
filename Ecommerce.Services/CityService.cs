@@ -52,30 +52,37 @@ public class CityService(IUnitOfWork unitOfWork) : ICityService
 
     public async Task AddAsync(City city)
     {
-        await _unitOfWork.CityRepository.InsertAsync(city);
-        await _unitOfWork.SaveChangesAsync();
+        var existingCountry = await _unitOfWork.CountryRepository.GetAsync(city.CountryId);
+        if (existingCountry is not null)
+        {
+            city.CountryId = existingCountry.Id;
+            city.Country = existingCountry;
+            await _unitOfWork.CityRepository.InsertAsync(city);
+            await _unitOfWork.SaveChangesAsync();
+        }
     }
 
     public async Task<bool> UpdateAsync(int id, City city)
     {
         var existingCity = await _unitOfWork.CityRepository.GetAsync(id);
-        if (existingCity is null)
+        var existingCountry = await _unitOfWork.CountryRepository.GetAsync(city.CountryId);
+        if (existingCity is null || existingCountry is null)
         {
             return false;
         }
 
         existingCity.Name = city.Name;
-        existingCity.Country = city.Country;
+        existingCity.CountryId = city.CountryId;
 
-        await _unitOfWork.CityRepository.UpdateAsync(city);
+        await _unitOfWork.CityRepository.UpdateAsync(existingCity);
         await _unitOfWork.SaveChangesAsync();
         return true;
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var country = await _unitOfWork.CityRepository.GetAsync(id);
-        if (country is not null)
+        var city = await _unitOfWork.CityRepository.GetAsync(id);
+        if (city is not null)
         {
             await _unitOfWork.CityRepository.DeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();

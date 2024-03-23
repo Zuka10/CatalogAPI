@@ -6,25 +6,25 @@ namespace Ecommerce.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CountryController(ICountryService countryService) : ControllerBase
+public class CityController(ICityService cityService) : ControllerBase
 {
-    private readonly ICountryService _countryService = countryService;
+    private readonly ICityService _cityService = cityService;
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
         try
         {
-            var countries = await _countryService.GetAllAsync();
-            if (countries is null || !countries.Any())
+            var cities = await _cityService.GetAllAsync();
+            if (cities is null || !cities.Any())
             {
-                return NotFound("countries not found");
+                return NotFound("cities not found");
             }
-            return Ok(countries);
+            return Ok(cities);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError);
+            return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
         }
     }
 
@@ -33,29 +33,29 @@ public class CountryController(ICountryService countryService) : ControllerBase
     {
         try
         {
-            var country = await _countryService.GetByIdAsync(id);
-            if (country is null)
+            var city = await _cityService.GetByIdAsync(id);
+            if (city is null)
             {
                 return NotFound();
             }
-            return Ok(country);
+            return Ok(city);
         }
         catch (KeyNotFoundException)
         {
             return NotFound($"record with key {id} not found");
         }
-        catch
+        catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Country country)
+    public async Task<IActionResult> Create(City city)
     {
         try
         {
-            await _countryService.AddAsync(country);
+            await _cityService.AddAsync(city);
             return Ok();
         }
         catch (Exception)
@@ -64,12 +64,12 @@ public class CountryController(ICountryService countryService) : ControllerBase
         }
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, Country country)
+    [HttpPut]
+    public async Task<IActionResult> Update(int id, City city)
     {
         try
         {
-            await _countryService.UpdateAsync(id, country);
+            await _cityService.UpdateAsync(id, city);
             return Ok();
         }
         catch (KeyNotFoundException)
@@ -82,15 +82,15 @@ public class CountryController(ICountryService countryService) : ControllerBase
         }
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete]
     public async Task<IActionResult> Delete(int id)
     {
         try
         {
-            await _countryService.DeleteAsync(id);
+            await _cityService.DeleteAsync(id);
             return Ok();
         }
-        catch(KeyNotFoundException)
+        catch (KeyNotFoundException)
         {
             return NotFound($"record with key {id} not found");
         }

@@ -65,7 +65,6 @@ public class CountryService(IUnitOfWork unitOfWork) : ICountryService
         }
 
         existingCountry.Name = country.Name;
-        existingCountry.Cities = country.Cities;
 
         await _unitOfWork.CountryRepository.UpdateAsync(existingCountry);
         await _unitOfWork.SaveChangesAsync();

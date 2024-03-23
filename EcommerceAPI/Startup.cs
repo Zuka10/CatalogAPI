@@ -1,6 +1,7 @@
 ﻿using Ecommerce.Facade.Repositories;
 using Ecommerce.Facade.Services;
 using Ecommerce.Repository;
+using Ecommerce.Service;
 using Ecommerce.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,7 @@ public class Startup(IConfiguration configuration)
             options.UseSqlServer(Configuration.GetConnectionString("MSSQLTest")));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ICountryService, CountryService>();
+        services.AddScoped<ICityService, CityService>();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
     }
