@@ -58,6 +58,10 @@ public class CityController(ICityService cityService) : ControllerBase
             await _cityService.AddAsync(city);
             return Ok();
         }
+        catch(KeyNotFoundException) 
+        {
+            return NotFound($"record with key {city.CountryId} not found");
+        }
         catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
