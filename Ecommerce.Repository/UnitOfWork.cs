@@ -11,6 +11,8 @@ public class UnitOfWork : IUnitOfWork
     private readonly ILogger<UnitOfWork> _logger;
     private readonly ICountryRepository _countryRepository;
     private readonly ICityRepository _cityRepository;
+    private readonly ICategoryRepository _categoryRepository;
+    private readonly IProductRepository _productRepository;
 
     public UnitOfWork(EcommerceDbContext context, ILogger<UnitOfWork> logger)
     {
@@ -18,10 +20,14 @@ public class UnitOfWork : IUnitOfWork
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _countryRepository = new CountryRepository(context);
         _cityRepository = new CityRepository(context);
+        _categoryRepository = new CategoryRepository(context);
+        _productRepository = new ProductRepository(context);
     }
 
     public ICountryRepository CountryRepository => _countryRepository;
     public ICityRepository CityRepository => _cityRepository;
+    public ICategoryRepository CategoryRepository => _categoryRepository;
+    public IProductRepository ProductRepository => _productRepository;
 
     public void BeginTransaction()
     {
