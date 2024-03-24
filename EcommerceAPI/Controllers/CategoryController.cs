@@ -6,21 +6,21 @@ namespace Ecommerce.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CityController(ICityService cityService) : ControllerBase
+public class CategoryController(ICategoryService categoryService) : ControllerBase
 {
-    private readonly ICityService _cityService = cityService;
+    private readonly ICategoryService _categoryService = categoryService;
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
         try
         {
-            var cities = await _cityService.GetAllAsync();
-            if (cities is null || !cities.Any())
+            var categories = await _categoryService.GetAllAsync();
+            if (categories is null || !categories.Any())
             {
-                return NotFound("cities not found");
+                return NotFound("categories not found");
             }
-            return Ok(cities);
+            return Ok(categories);
         }
         catch (Exception)
         {
@@ -33,12 +33,12 @@ public class CityController(ICityService cityService) : ControllerBase
     {
         try
         {
-            var city = await _cityService.GetByIdAsync(id);
-            if (city is null)
+            var category = await _categoryService.GetByIdAsync(id);
+            if (category is null)
             {
                 return NotFound();
             }
-            return Ok(city);
+            return Ok(category);
         }
         catch (KeyNotFoundException)
         {
@@ -51,16 +51,12 @@ public class CityController(ICityService cityService) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(City city)
+    public async Task<IActionResult> Create(Category category)
     {
         try
         {
-            await _cityService.AddAsync(city);
+            await _categoryService.AddAsync(category);
             return Ok();
-        }
-        catch(KeyNotFoundException) 
-        {
-            return NotFound($"record with key {city.CountryId} not found");
         }
         catch (Exception)
         {
@@ -68,12 +64,12 @@ public class CityController(ICityService cityService) : ControllerBase
         }
     }
 
-    [HttpPut]
-    public async Task<IActionResult> Update(int id, City city)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, Category category)
     {
         try
         {
-            await _cityService.UpdateAsync(id, city);
+            await _categoryService.UpdateAsync(id, category);
             return Ok();
         }
         catch (KeyNotFoundException)
@@ -86,12 +82,12 @@ public class CityController(ICityService cityService) : ControllerBase
         }
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         try
         {
-            await _cityService.DeleteAsync(id);
+            await _categoryService.DeleteAsync(id);
             return Ok();
         }
         catch (KeyNotFoundException)
