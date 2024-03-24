@@ -19,6 +19,8 @@ public class Startup(IConfiguration configuration)
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ICountryService, CountryService>();
         services.AddScoped<ICityService, CityService>();
+        services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IProductService, ProductService>();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
     }
