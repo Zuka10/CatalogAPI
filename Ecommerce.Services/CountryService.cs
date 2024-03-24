@@ -14,46 +14,16 @@ public class CountryService(IUnitOfWork unitOfWork) : ICountryService
         _unitOfWork.SaveChanges();
     }
 
-    public void Update(Country country)
-    {
-        _unitOfWork.CountryRepository.Update(country);
-        _unitOfWork.SaveChanges();
-    }
-
-    public void Delete(int id)
-    {
-        var country = _unitOfWork.CountryRepository.Get(id);
-        if (country is not null)
-        {
-            _unitOfWork.CountryRepository.Delete(country);
-            _unitOfWork.SaveChanges();
-        }
-    }
-
-    public IEnumerable<Country> GetAll()
-    {
-        return _unitOfWork.CountryRepository.GetAll();
-    }
-
-    public Country GetById(int id)
-    {
-        return _unitOfWork.CountryRepository.Get(id);
-    }
-
-    public async Task<IEnumerable<Country>> GetAllAsync()
-    {
-        return await _unitOfWork.CountryRepository.GetAllAsync();
-    }
-
-    public async Task<Country> GetByIdAsync(int id)
-    {
-        return await _unitOfWork.CountryRepository.GetAsync(id);
-    }
-
     public async Task AddAsync(Country country)
     {
         await _unitOfWork.CountryRepository.InsertAsync(country);
         await _unitOfWork.SaveChangesAsync();
+    }
+
+    public void Update(Country country)
+    {
+        _unitOfWork.CountryRepository.Update(country);
+        _unitOfWork.SaveChanges();
     }
 
     public async Task<bool> UpdateAsync(int id, Country country)
@@ -71,6 +41,16 @@ public class CountryService(IUnitOfWork unitOfWork) : ICountryService
         return true;
     }
 
+    public void Delete(int id)
+    {
+        var country = _unitOfWork.CountryRepository.Get(id);
+        if (country is not null)
+        {
+            _unitOfWork.CountryRepository.Delete(country);
+            _unitOfWork.SaveChanges();
+        }
+    }
+
     public async Task<bool> DeleteAsync(int id)
     {
         var country = await _unitOfWork.CountryRepository.GetAsync(id);
@@ -81,5 +61,25 @@ public class CountryService(IUnitOfWork unitOfWork) : ICountryService
             return true;
         }
         return false;
+    }
+
+    public IEnumerable<Country> GetAll()
+    {
+        return _unitOfWork.CountryRepository.GetAll();
+    }
+
+    public async Task<IEnumerable<Country>> GetAllAsync()
+    {
+        return await _unitOfWork.CountryRepository.GetAllAsync();
+    }
+
+    public Country GetById(int id)
+    {
+        return _unitOfWork.CountryRepository.Get(id);
+    }
+
+    public async Task<Country> GetByIdAsync(int id)
+    {
+        return await _unitOfWork.CountryRepository.GetAsync(id);
     }
 }

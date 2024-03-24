@@ -4,15 +4,15 @@ namespace Ecommerce.Facade.Services;
 
 public interface IProductService
 {
-    void Add(City city);
-    void Update(City city);
+    void Add(Product product);
+    void Update(Product product);
     void Delete(int id);
-    City GetById(int id);
-    IEnumerable<City> GetAll();
+    Product GetById(int id);
+    IEnumerable<Product> GetAll();
     //Async methods
-    Task<City> GetByIdAsync(int id);
-    Task AddAsync(City city);
-    Task<bool> UpdateAsync(int id, City city);
+    Task<Product> GetByIdAsync(int id);
+    Task AddAsync(Product product);
+    Task<bool> UpdateAsync(int id, Product product);
     Task<bool> DeleteAsync(int id);
-    Task<IEnumerable<City>> GetAllAsync();
+    Task<IEnumerable<Product>> GetAllAsync();
 }

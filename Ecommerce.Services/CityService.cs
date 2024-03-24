@@ -13,43 +13,6 @@ public class CityService(IUnitOfWork unitOfWork) : ICityService
         _unitOfWork.CityRepository.Insert(city);
         _unitOfWork.SaveChanges();
     }
-
-    public void Update(City city)
-    {
-        _unitOfWork.CityRepository.Update(city);
-        _unitOfWork.SaveChanges();
-    }
-
-    public void Delete(int id)
-    {
-        var city = _unitOfWork.CityRepository.Get(id);
-        if (city is not null)
-        {
-            _unitOfWork.CityRepository.Delete(city);
-            _unitOfWork.SaveChanges();
-        }
-    }
-
-    public IEnumerable<City> GetAll()
-    {
-        return _unitOfWork.CityRepository.GetAll();
-    }
-
-    public City GetById(int id)
-    {
-        return _unitOfWork.CityRepository.Get(id);
-    }
-
-    public async Task<IEnumerable<City>> GetAllAsync()
-    {
-        return await _unitOfWork.CityRepository.GetAllAsync();
-    }
-
-    public async Task<City> GetByIdAsync(int id)
-    {
-        return await _unitOfWork.CityRepository.GetAsync(id);
-    }
-
     public async Task AddAsync(City city)
     {
         var existingCountry = await _unitOfWork.CountryRepository.GetAsync(city.CountryId);
@@ -60,6 +23,12 @@ public class CityService(IUnitOfWork unitOfWork) : ICityService
             await _unitOfWork.CityRepository.InsertAsync(city);
             await _unitOfWork.SaveChangesAsync();
         }
+    }
+
+    public void Update(City city)
+    {
+        _unitOfWork.CityRepository.Update(city);
+        _unitOfWork.SaveChanges();
     }
 
     public async Task<bool> UpdateAsync(int id, City city)
@@ -79,6 +48,16 @@ public class CityService(IUnitOfWork unitOfWork) : ICityService
         return true;
     }
 
+    public void Delete(int id)
+    {
+        var city = _unitOfWork.CityRepository.Get(id);
+        if (city is not null)
+        {
+            _unitOfWork.CityRepository.Delete(city);
+            _unitOfWork.SaveChanges();
+        }
+    }
+
     public async Task<bool> DeleteAsync(int id)
     {
         var city = await _unitOfWork.CityRepository.GetAsync(id);
@@ -89,5 +68,25 @@ public class CityService(IUnitOfWork unitOfWork) : ICityService
             return true;
         }
         return false;
+    }
+
+    public IEnumerable<City> GetAll()
+    {
+        return _unitOfWork.CityRepository.GetAll();
+    }
+
+    public async Task<IEnumerable<City>> GetAllAsync()
+    {
+        return await _unitOfWork.CityRepository.GetAllAsync();
+    }
+
+    public City GetById(int id)
+    {
+        return _unitOfWork.CityRepository.Get(id);
+    }
+
+    public async Task<City> GetByIdAsync(int id)
+    {
+        return await _unitOfWork.CityRepository.GetAsync(id);
     }
 }
