@@ -68,7 +68,7 @@ public class ProductController(IProductService productService) : ControllerBase
                 CategoryId = productModel.CategoryId
             };
 
-            await _productService.AddAsync(product, productModel.Image);
+            await _productService.AddAsync(product);
             return Ok();
         }
         catch (ArgumentNullException)

@@ -15,19 +15,9 @@ public class ProductService(IUnitOfWork unitOfWork) : IProductService
         _unitOfWork.SaveChanges();
     }
 
-    public async Task AddAsync(Product product, IFormFile formFile)
+    public async Task AddAsync(Product product)
     {
-        if (product is null)
-        {
-            throw new ArgumentNullException(nameof(product));
-        }
-
-        if (formFile != null)
-        {
-            using var memoryStream = new MemoryStream();
-            await formFile.CopyToAsync(memoryStream);
-            product.Image = memoryStream.ToArray();
-        }
+        ArgumentNullException.ThrowIfNull(product);
 
         await _unitOfWork.ProductRepository.InsertAsync(product);
         await _unitOfWork.SaveChangesAsync();
@@ -95,14 +85,5 @@ public class ProductService(IUnitOfWork unitOfWork) : IProductService
     public async Task<Product> GetByIdAsync(int id)
     {
         return await _unitOfWork.ProductRepository.GetAsync(id);
-    }
-
-    private async Task<byte[]> ConvertToByteArrayAsync(IFormFile file)
-    {
-        using (MemoryStream memoryStream = new MemoryStream())
-        {
-            await file.CopyToAsync(memoryStream);
-            return memoryStream.ToArray();
-        }
     }
 }

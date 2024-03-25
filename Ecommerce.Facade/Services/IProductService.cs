@@ -12,7 +12,7 @@ public interface IProductService
     IEnumerable<Product> GetAll();
     //Async methods
     Task<Product> GetByIdAsync(int id);
-    Task AddAsync(Product product, IFormFile formFile);
+    Task AddAsync(Product product);
     Task<bool> UpdateAsync(int id, Product product);
     Task<bool> DeleteAsync(int id);
     Task<IEnumerable<Product>> GetAllAsync();
