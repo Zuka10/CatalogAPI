@@ -17,6 +17,7 @@ public class CategoryService(IUnitOfWork unitOfWork) : ICategoryService
     public async Task AddAsync(Category category)
     {
         await _unitOfWork.CategoryRepository.InsertAsync(category);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public void Update(int id, Category category)

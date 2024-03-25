@@ -1,4 +1,5 @@
-﻿using Ecommerce.DTO;
+﻿using Ecommerce.API.Models;
+using Ecommerce.DTO;
 using Ecommerce.Facade.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -51,12 +52,28 @@ public class ProductController(IProductService productService) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Product product)
+    public async Task<IActionResult> Create(ProductModel productModel)
     {
         try
         {
-            await _productService.AddAsync(product);
+            using var memoryStream = new MemoryStream();
+            await productModel.Image.CopyToAsync(memoryStream);
+
+            var product = new Product
+            {
+                Name = productModel.Name,
+                Description = productModel.Description,
+                Image = memoryStream.ToArray(),
+                UnitPrice = productModel.UnitPrice,
+                CategoryId = productModel.CategoryId
+            };
+
+            await _productService.AddAsync(product, productModel.Image);
             return Ok();
+        }
+        catch (ArgumentNullException)
+        {
+            return BadRequest("required property is null");
         }
         catch (Exception)
         {
@@ -65,16 +82,32 @@ public class ProductController(IProductService productService) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, Product product)
+    public async Task<IActionResult> Update(int id, ProductModel productModel)
     {
         try
         {
+            using var memoryStream = new MemoryStream();
+            await productModel.Image.CopyToAsync(memoryStream);
+
+            var product = new Product
+            {
+                Name = productModel.Name,
+                Description = productModel.Description,
+                Image = memoryStream.ToArray(),
+                UnitPrice = productModel.UnitPrice,
+                CategoryId = productModel.CategoryId
+            };
+
             await _productService.UpdateAsync(id, product);
             return Ok();
         }
         catch (KeyNotFoundException)
         {
             return NotFound($"record with key {id} not found");
+        }
+        catch (ArgumentNullException)
+        {
+            return BadRequest("required property is null");
         }
         catch (Exception)
         {
