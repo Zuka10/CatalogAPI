@@ -25,10 +25,17 @@ public class CityService(IUnitOfWork unitOfWork) : ICityService
         }
     }
 
-    public void Update(City city)
+    public void Update(int id, City city)
     {
-        _unitOfWork.CityRepository.Update(city);
-        _unitOfWork.SaveChanges();
+        var existingCity = _unitOfWork.CityRepository.Get(id);
+        if (existingCity is not null)
+        {
+            existingCity.Name = city.Name;
+            existingCity.CountryId = city.CountryId;
+
+            _unitOfWork.CityRepository.Update(existingCity);
+            _unitOfWork.SaveChanges();
+        }
     }
 
     public async Task<bool> UpdateAsync(int id, City city)
