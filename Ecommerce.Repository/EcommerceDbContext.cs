@@ -31,6 +31,10 @@ public class EcommerceDbContext(DbContextOptions<EcommerceDbContext> options) : 
             .WithOne(c => c.Product)
             .HasForeignKey(c => c.ProductId);
 
+        modelBuilder.Entity<Product>()
+            .Property(p => p.UnitPrice)
+            .HasColumnType("money");
+
         base.OnModelCreating(modelBuilder);
     }
 }

@@ -2,7 +2,6 @@
 using Ecommerce.Facade.Services;
 using Ecommerce.Repository;
 using Ecommerce.Service;
-using Ecommerce.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceAPI;
