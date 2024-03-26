@@ -1,4 +1,5 @@
-﻿using Ecommerce.DTO;
+﻿using Ecommerce.API.Models;
+using Ecommerce.DTO;
 using Ecommerce.Facade.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,11 +17,13 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
         try
         {
             var categories = await _categoryService.GetAllAsync();
-            if (categories is null || !categories.Any())
+            var response = categories.Select(c => new
             {
-                return NotFound("categories not found");
-            }
-            return Ok(categories);
+                id = c.Id,
+                name = c.Name
+            });
+
+            return Ok(response);
         }
         catch (Exception)
         {
@@ -35,10 +38,10 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
         {
             var category = await _categoryService.GetByIdAsync(id);
             if (category is null)
-            {
                 return NotFound();
-            }
-            return Ok(category);
+
+            var response = new CategoryModel { Name = category.Name };
+            return Ok(response);
         }
         catch (KeyNotFoundException)
         {
@@ -51,12 +54,14 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Category category)
+    public async Task<IActionResult> Create([FromForm] string name)
     {
         try
         {
+            var category = new Category { Name = name };
             await _categoryService.AddAsync(category);
-            return Ok();
+            Console.WriteLine(name);
+            return Ok("Created Successfully");
         }
         catch (Exception)
         {
@@ -65,12 +70,13 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, Category category)
+    public async Task<IActionResult> Update(int id, CategoryModel categoryModel)
     {
         try
         {
+            var category = new Category { Name = categoryModel.Name };
             await _categoryService.UpdateAsync(id, category);
-            return Ok();
+            return Ok("Updated Successfully");
         }
         catch (KeyNotFoundException)
         {
@@ -88,7 +94,7 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
         try
         {
             await _categoryService.DeleteAsync(id);
-            return Ok();
+            return Ok("Deleted Successfully");
         }
         catch (KeyNotFoundException)
         {

@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Ecommerce.Services\Ecommerce.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\NewFolder\" />
+  </ItemGroup>
+
 </Project>

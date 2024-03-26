@@ -17,10 +17,6 @@ public class ImageController(IImageService imageService) : ControllerBase
         try
         {
             var images = await _imageService.GetAllAsync();
-            if (images is null || !images.Any())
-            {
-                return NotFound("images not found");
-            }
             return Ok(images);
         }
         catch (Exception)
@@ -36,9 +32,15 @@ public class ImageController(IImageService imageService) : ControllerBase
         {
             var image = await _imageService.GetByIdAsync(id);
             if (image is null)
-            {
                 return NotFound();
-            }
+
+            var response = new
+            {
+                id = image.Id,
+                imageUrl = image.ImageUrl,
+                productId = image.ProductId
+            };
+
             return Ok(image);
         }
         catch (KeyNotFoundException)
@@ -69,7 +71,7 @@ public class ImageController(IImageService imageService) : ControllerBase
             };
 
             await _imageService.AddAsync(image);
-            return Ok();
+            return Ok("Created Successfully");
         }
         catch (KeyNotFoundException)
         {
@@ -103,7 +105,7 @@ public class ImageController(IImageService imageService) : ControllerBase
             };
 
             await _imageService.UpdateAsync(id, image);
-            return Ok();
+            return Ok("Updated Successfully");
         }
         catch (KeyNotFoundException)
         {
@@ -121,7 +123,7 @@ public class ImageController(IImageService imageService) : ControllerBase
         try
         {
             await _imageService.DeleteAsync(id);
-            return Ok();
+            return Ok("Deleted Successfuly");
         }
         catch (KeyNotFoundException)
         {

@@ -7,21 +7,27 @@ namespace Ecommerce.API.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class ProductController(IProductService productService) : ControllerBase
+public class ProductController(IProductService productService, ICategoryService categoryService) : ControllerBase
 {
     private readonly IProductService _productService = productService;
+    private readonly ICategoryService _categoryService = categoryService;
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> Index()
     {
         try
         {
             var products = await _productService.GetAllAsync();
-            if (products is null || !products.Any())
+            var response = products.Select(p => new
             {
-                return NotFound("products not found");
-            }
-            return Ok(products);
+                id = p.Id,
+                name = p.Name,
+                description = p.Description,
+                unitPrice = p.UnitPrice,
+                category = p.Category?.Name
+            });
+
+            return Ok(response);
         }
         catch (Exception)
         {
@@ -30,16 +36,25 @@ public class ProductController(IProductService productService) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> Show(int id)
     {
         try
         {
             var product = await _productService.GetByIdAsync(id);
+            var category = await _categoryService.GetByIdAsync(product.CategoryId);
             if (product is null)
-            {
                 return NotFound();
-            }
-            return Ok(product);
+
+            var response = new
+            {
+                id = product.Id,
+                name = product.Name,
+                description = product.Description,
+                unitPrice = product.UnitPrice,
+                category = category.Name
+            };
+
+            return Ok(response);
         }
         catch (KeyNotFoundException)
         {
@@ -52,13 +67,10 @@ public class ProductController(IProductService productService) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(ProductModel productModel)
+    public async Task<IActionResult> Store(ProductModel productModel)
     {
         try
         {
-            using var memoryStream = new MemoryStream();
-            await productModel.Image.CopyToAsync(memoryStream);
-
             var product = new Product
             {
                 Name = productModel.Name,
@@ -68,7 +80,7 @@ public class ProductController(IProductService productService) : ControllerBase
             };
 
             await _productService.AddAsync(product);
-            return Ok();
+            return Ok("Created Successfully");
         }
         catch (ArgumentNullException)
         {
@@ -94,7 +106,7 @@ public class ProductController(IProductService productService) : ControllerBase
             };
 
             await _productService.UpdateAsync(id, product);
-            return Ok();
+            return Ok("Updated successfully");
         }
         catch (KeyNotFoundException)
         {
@@ -111,12 +123,12 @@ public class ProductController(IProductService productService) : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Destroy(int id)
     {
         try
         {
             await _productService.DeleteAsync(id);
-            return Ok();
+            return Ok("Deleted Successfully");
         }
         catch (KeyNotFoundException)
         {

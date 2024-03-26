@@ -1,12 +1,14 @@
 ﻿using Ecommerce.DTO;
 using Ecommerce.Facade.Repositories;
 using Ecommerce.Facade.Services;
+using Ecommerce.Repository;
 
 namespace Ecommerce.Service;
 
-public class CategoryService(IUnitOfWork unitOfWork) : ICategoryService
+public class CategoryService(IUnitOfWork unitOfWork, EcommerceDbContext context) : ICategoryService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly EcommerceDbContext _context = context;
 
     public void Add(Category category)
     {

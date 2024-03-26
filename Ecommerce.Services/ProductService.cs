@@ -1,12 +1,15 @@
 ﻿using Ecommerce.DTO;
 using Ecommerce.Facade.Repositories;
 using Ecommerce.Facade.Services;
+using Ecommerce.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Service;
 
-public class ProductService(IUnitOfWork unitOfWork) : IProductService
+public class ProductService(IUnitOfWork unitOfWork, EcommerceDbContext context) : IProductService
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly EcommerceDbContext _context = context;
 
     public void Add(Product product)
     {
@@ -17,7 +20,8 @@ public class ProductService(IUnitOfWork unitOfWork) : IProductService
     public async Task AddAsync(Product product)
     {
         ArgumentNullException.ThrowIfNull(product);
-
+        var category = await _unitOfWork.CategoryRepository.GetAsync(product.CategoryId);
+        product.Category = category;
         await _unitOfWork.ProductRepository.InsertAsync(product);
         await _unitOfWork.SaveChangesAsync();
     }
@@ -73,7 +77,8 @@ public class ProductService(IUnitOfWork unitOfWork) : IProductService
 
     public async Task<IEnumerable<Product>> GetAllAsync()
     {
-        return await _unitOfWork.ProductRepository.GetAllAsync();
+        return await _context.Products
+            .Include(p => p.Category).ToListAsync();
     }
 
     public Product GetById(int id)

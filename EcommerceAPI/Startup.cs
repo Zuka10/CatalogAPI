@@ -19,6 +19,17 @@ public class Startup(IConfiguration configuration)
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IImageService, ImageService>();
+        services.AddCors(options =>
+        {
+            options.AddPolicy("SpecificOrigins",
+                policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173");
+                    policy.AllowAnyMethod();
+                    policy.AllowAnyHeader();
+                    policy.AllowCredentials();
+                });
+        });
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
     }
@@ -35,6 +46,7 @@ public class Startup(IConfiguration configuration)
 
         app.UseRouting();
         app.UseAuthorization();
+        app.UseCors("SpecificOrigins");
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
