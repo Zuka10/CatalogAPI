@@ -9,8 +9,6 @@ public class UnitOfWork : IUnitOfWork
     private IDbContextTransaction? _transaction;
     private readonly EcommerceDbContext _context;
     private readonly ILogger<UnitOfWork> _logger;
-    private readonly ICountryRepository _countryRepository;
-    private readonly ICityRepository _cityRepository;
     private readonly ICategoryRepository _categoryRepository;
     private readonly IProductRepository _productRepository;
     private readonly IImageRepository _imageRepository;
@@ -19,15 +17,11 @@ public class UnitOfWork : IUnitOfWork
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _countryRepository = new CountryRepository(context);
-        _cityRepository = new CityRepository(context);
         _categoryRepository = new CategoryRepository(context);
         _productRepository = new ProductRepository(context);
         _imageRepository = new ImageRepository(context);
     }
 
-    public ICountryRepository CountryRepository => _countryRepository;
-    public ICityRepository CityRepository => _cityRepository;
     public ICategoryRepository CategoryRepository => _categoryRepository;
     public IProductRepository ProductRepository => _productRepository;
     public IImageRepository ImageRepository => _imageRepository;
@@ -76,7 +70,6 @@ public class UnitOfWork : IUnitOfWork
             _logger.LogError(ex, "DbContext error");
             throw;
         }
-
     }
 
     public void Dispose()

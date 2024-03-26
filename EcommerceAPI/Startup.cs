@@ -17,8 +17,6 @@ public class Startup(IConfiguration configuration)
         services.AddDbContext<EcommerceDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("MSSQLTest")));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<ICountryService, CountryService>();
-        services.AddScoped<ICityService, CityService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IImageService, ImageService>();

@@ -2,8 +2,6 @@
 
 public interface IUnitOfWork
 {
-    ICountryRepository CountryRepository { get; }
-    ICityRepository CityRepository { get; }
     ICategoryRepository CategoryRepository { get; }
     IProductRepository ProductRepository { get; }
     IImageRepository ImageRepository { get; }
