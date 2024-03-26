@@ -1,7 +1,6 @@
 ﻿using Ecommerce.DTO;
 using Ecommerce.Facade.Repositories;
 using Ecommerce.Facade.Services;
-using Microsoft.AspNetCore.Http;
 
 namespace Ecommerce.Service;
 

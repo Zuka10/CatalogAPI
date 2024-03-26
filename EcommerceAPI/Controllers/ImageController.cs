@@ -7,21 +7,21 @@ namespace Ecommerce.API.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class ProductController(IProductService productService) : ControllerBase
+public class ImageController(IImageService imageService) : ControllerBase
 {
-    private readonly IProductService _productService = productService;
+    private readonly IImageService _imageService = imageService;
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
         try
         {
-            var products = await _productService.GetAllAsync();
-            if (products is null || !products.Any())
+            var images = await _imageService.GetAllAsync();
+            if (images is null || !images.Any())
             {
-                return NotFound("products not found");
+                return NotFound("images not found");
             }
-            return Ok(products);
+            return Ok(images);
         }
         catch (Exception)
         {
@@ -34,12 +34,12 @@ public class ProductController(IProductService productService) : ControllerBase
     {
         try
         {
-            var product = await _productService.GetByIdAsync(id);
-            if (product is null)
+            var image = await _imageService.GetByIdAsync(id);
+            if (image is null)
             {
                 return NotFound();
             }
-            return Ok(product);
+            return Ok(image);
         }
         catch (KeyNotFoundException)
         {
@@ -52,23 +52,28 @@ public class ProductController(IProductService productService) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(ProductModel productModel)
+    public async Task<IActionResult> Create(ImageModel imageModel)
     {
         try
         {
             using var memoryStream = new MemoryStream();
-            await productModel.Image.CopyToAsync(memoryStream);
-
-            var product = new Product
+            foreach (var item in imageModel.Images)
             {
-                Name = productModel.Name,
-                Description = productModel.Description,
-                UnitPrice = productModel.UnitPrice,
-                CategoryId = productModel.CategoryId
+                await item.CopyToAsync(memoryStream);
+            }
+
+            var image = new Image
+            {
+                ImageUrl = memoryStream.ToArray(),
+                ProductId = imageModel.ProductId
             };
 
-            await _productService.AddAsync(product);
+            await _imageService.AddAsync(image);
             return Ok();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound($"record with key {imageModel.ProductId} not found");
         }
         catch (ArgumentNullException)
         {
@@ -81,32 +86,32 @@ public class ProductController(IProductService productService) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, ProductModel productModel)
+    public async Task<IActionResult> Update(int id, ImageModel imageModel)
     {
         try
         {
-            var product = new Product
+            using var memoryStream = new MemoryStream();
+            foreach (var item in imageModel.Images)
             {
-                Name = productModel.Name,
-                Description = productModel.Description,
-                UnitPrice = productModel.UnitPrice,
-                CategoryId = productModel.CategoryId
+                await item.CopyToAsync(memoryStream);
+            }
+
+            var image = new Image
+            {
+                ImageUrl = memoryStream.ToArray(),
+                ProductId = imageModel.ProductId
             };
 
-            await _productService.UpdateAsync(id, product);
+            await _imageService.UpdateAsync(id, image);
             return Ok();
         }
         catch (KeyNotFoundException)
         {
-            return NotFound($"record with key {id} not found");
+            return NotFound($"record with key {id} or {imageModel.ProductId} not found");
         }
-        catch (ArgumentNullException)
+        catch (Exception e)
         {
-            return BadRequest("required property is null");
-        }
-        catch (Exception)
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError);
+            return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
         }
     }
 
@@ -115,7 +120,7 @@ public class ProductController(IProductService productService) : ControllerBase
     {
         try
         {
-            await _productService.DeleteAsync(id);
+            await _imageService.DeleteAsync(id);
             return Ok();
         }
         catch (KeyNotFoundException)

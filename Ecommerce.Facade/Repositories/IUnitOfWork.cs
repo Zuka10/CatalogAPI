@@ -6,7 +6,7 @@ public interface IUnitOfWork
     ICityRepository CityRepository { get; }
     ICategoryRepository CategoryRepository { get; }
     IProductRepository ProductRepository { get; }
-
+    IImageRepository ImageRepository { get; }
     void BeginTransaction();
     void Commit();
     void Rollback();

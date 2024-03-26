@@ -13,6 +13,7 @@ public class UnitOfWork : IUnitOfWork
     private readonly ICityRepository _cityRepository;
     private readonly ICategoryRepository _categoryRepository;
     private readonly IProductRepository _productRepository;
+    private readonly IImageRepository _imageRepository;
 
     public UnitOfWork(EcommerceDbContext context, ILogger<UnitOfWork> logger)
     {
@@ -22,12 +23,14 @@ public class UnitOfWork : IUnitOfWork
         _cityRepository = new CityRepository(context);
         _categoryRepository = new CategoryRepository(context);
         _productRepository = new ProductRepository(context);
+        _imageRepository = new ImageRepository(context);
     }
 
     public ICountryRepository CountryRepository => _countryRepository;
     public ICityRepository CityRepository => _cityRepository;
     public ICategoryRepository CategoryRepository => _categoryRepository;
     public IProductRepository ProductRepository => _productRepository;
+    public IImageRepository ImageRepository => _imageRepository;
 
     public void BeginTransaction()
     {
