@@ -7,13 +7,12 @@ namespace Ecommerce.API.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class ProductController(IProductService productService, ICategoryService categoryService) : ControllerBase
+public class ProductController(IProductService productService) : ControllerBase
 {
     private readonly IProductService _productService = productService;
-    private readonly ICategoryService _categoryService = categoryService;
 
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> GetAll()
     {
         try
         {
@@ -36,12 +35,11 @@ public class ProductController(IProductService productService, ICategoryService 
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> Show(int id)
+    public async Task<IActionResult> Get(int id)
     {
         try
         {
             var product = await _productService.GetByIdAsync(id);
-            var category = await _categoryService.GetByIdAsync(product.CategoryId);
             if (product is null)
                 return NotFound();
 
@@ -51,7 +49,7 @@ public class ProductController(IProductService productService, ICategoryService 
                 name = product.Name,
                 description = product.Description,
                 unitPrice = product.UnitPrice,
-                category = category.Name
+                category = product.Category?.Name
             };
 
             return Ok(response);
@@ -67,7 +65,7 @@ public class ProductController(IProductService productService, ICategoryService 
     }
 
     [HttpPost]
-    public async Task<IActionResult> Store(ProductModel productModel)
+    public async Task<IActionResult> Create(ProductModel productModel)
     {
         try
         {
@@ -123,7 +121,7 @@ public class ProductController(IProductService productService, ICategoryService 
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Destroy(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         try
         {

@@ -40,7 +40,12 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
             if (category is null)
                 return NotFound();
 
-            var response = new CategoryModel { Name = category.Name };
+            var response = new
+            {
+                id = category.Id,
+                name = category.Name
+            };
+
             return Ok(response);
         }
         catch (KeyNotFoundException)

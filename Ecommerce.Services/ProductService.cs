@@ -88,6 +88,8 @@ public class ProductService(IUnitOfWork unitOfWork, EcommerceDbContext context) 
 
     public async Task<Product> GetByIdAsync(int id)
     {
-        return await _unitOfWork.ProductRepository.GetAsync(id);
+        return await _context.Products
+            .Include(p => p.Category)
+            .FirstAsync();
     }
 }
