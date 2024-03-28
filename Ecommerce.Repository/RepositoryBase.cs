@@ -26,7 +26,7 @@ public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
 
-        return _dbSet.SingleOrDefault(predicate)!;
+        return _dbSet.AsNoTracking().SingleOrDefault(predicate)!;
     }
 
     public void Insert(TEntity entity)
@@ -69,14 +69,14 @@ public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
 
     public async Task<IEnumerable<TEntity>> GetAllAsync()
     {
-        return await _dbSet.ToListAsync();
+        return await _dbSet.AsNoTracking().ToListAsync();
     }
 
     public async Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> predicate)
     {
         if (predicate == null) throw new ArgumentNullException(nameof(predicate));
 
-        return await _dbSet.SingleOrDefaultAsync(predicate) ?? throw new KeyNotFoundException("Record not found");
+        return await _dbSet.AsNoTracking().SingleOrDefaultAsync(predicate) ?? throw new KeyNotFoundException("Record not found");
     }
 
     public async Task InsertAsync(TEntity entity)
