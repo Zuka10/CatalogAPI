@@ -4,17 +4,11 @@ using System.Linq.Expressions;
 
 namespace Ecommerce.Repository;
 
-public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
+public abstract class RepositoryBase<TEntity>(EcommerceDbContext context) : IRepositoryBase<TEntity>
     where TEntity : class
 {
-    protected readonly EcommerceDbContext _context;
-    protected readonly DbSet<TEntity> _dbSet;
-
-    public RepositoryBase(EcommerceDbContext context)
-    {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-        _dbSet = context.Set<TEntity>();
-    }
+    protected readonly EcommerceDbContext _context = context ?? throw new ArgumentNullException(nameof(context));
+    protected readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
 
     public TEntity Get(params object[] id) => _dbSet.Find(id) ?? throw new KeyNotFoundException($"Record with key {id} not found");
 
