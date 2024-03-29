@@ -23,6 +23,7 @@ public class ProductController(IProductService productService) : ControllerBase
                 name = p.Name,
                 description = p.Description,
                 unitPrice = p.UnitPrice,
+                categoryId = p.CategoryId,
                 category = p.Category?.Name
             });
 
@@ -49,6 +50,7 @@ public class ProductController(IProductService productService) : ControllerBase
                 name = product.Name,
                 description = product.Description,
                 unitPrice = product.UnitPrice,
+                categoryId = product.CategoryId,
                 category = product.Category?.Name
             };
 
