@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.Repository.Migrations
 {
     [DbContext(typeof(EcommerceDbContext))]
-    [Migration("20240326093055_Initial")]
-    partial class Initial
+    [Migration("20240403070334_Second")]
+    partial class Second
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,6 +81,9 @@ namespace Ecommerce.Repository.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Images")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -98,7 +101,7 @@ namespace Ecommerce.Repository.Migrations
             modelBuilder.Entity("Ecommerce.DTO.Image", b =>
                 {
                     b.HasOne("Ecommerce.DTO.Product", "Product")
-                        .WithMany("Images")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -120,11 +123,6 @@ namespace Ecommerce.Repository.Migrations
             modelBuilder.Entity("Ecommerce.DTO.Category", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("Ecommerce.DTO.Product", b =>
-                {
-                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

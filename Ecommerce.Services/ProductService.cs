@@ -40,6 +40,7 @@ public class ProductService(IUnitOfWork unitOfWork, EcommerceDbContext context) 
             existingProduct.Description = product.Description;
             existingProduct.UnitPrice = product.UnitPrice;
             existingProduct.CategoryId = product.CategoryId;
+            existingProduct.Images = product.Images;
 
             await _unitOfWork.ProductRepository.UpdateAsync(existingProduct);
             await _unitOfWork.SaveChangesAsync();

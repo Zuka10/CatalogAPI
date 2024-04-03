@@ -1,5 +1,4 @@
-﻿using Ecommerce.API.Models;
-using Ecommerce.DTO;
+﻿using Ecommerce.DTO;
 using Ecommerce.Facade.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -75,11 +74,11 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, CategoryModel categoryModel)
+    public async Task<IActionResult> Update(int id, [FromForm] string name)
     {
         try
         {
-            var category = new Category { Name = categoryModel.Name };
+            var category = new Category { Name = name };
             await _categoryService.UpdateAsync(id, category);
             return Ok("Updated Successfully");
         }

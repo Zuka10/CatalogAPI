@@ -53,69 +53,69 @@ public class ImageController(IImageService imageService) : ControllerBase
         }
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Create(ImageModel imageModel)
-    {
-        try
-        {
-            using var memoryStream = new MemoryStream();
-            foreach (var item in imageModel.Images)
-            {
-                await item.CopyToAsync(memoryStream);
-            }
+    //[HttpPost]
+    //public async Task<IActionResult> Create([FromForm] ImageModel imageModel)
+    //{
+    //    try
+    //    {
+    //        using var memoryStream = new MemoryStream();
+    //        foreach (var item in imageModel.Images)
+    //        {
+    //            await item.CopyToAsync(memoryStream);
+    //        }
 
-            var image = new Image
-            {
-                ImageUrl = memoryStream.ToArray(),
-                ProductId = imageModel.ProductId
-            };
+    //        var image = new Image
+    //        {
+    //            ImageUrl = memoryStream.ToArray(),
+    //            ProductId = imageModel.ProductId
+    //        };
 
-            await _imageService.AddAsync(image);
-            return Ok("Created Successfully");
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound($"record with key {imageModel.ProductId} not found");
-        }
-        catch (ArgumentNullException)
-        {
-            return BadRequest("required property is null");
-        }
-        catch (Exception)
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError);
-        }
-    }
+    //        await _imageService.AddAsync(image);
+    //        return Ok("Created Successfully");
+    //    }
+    //    catch (KeyNotFoundException)
+    //    {
+    //        return NotFound($"record with key {imageModel.ProductId} not found");
+    //    }
+    //    catch (ArgumentNullException)
+    //    {
+    //        return BadRequest("required property is null");
+    //    }
+    //    catch (Exception)
+    //    {
+    //        return StatusCode(StatusCodes.Status500InternalServerError);
+    //    }
+    //}
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, ImageModel imageModel)
-    {
-        try
-        {
-            using var memoryStream = new MemoryStream();
-            foreach (var item in imageModel.Images)
-            {
-                await item.CopyToAsync(memoryStream);
-            }
+    //[HttpPut("{id}")]
+    //public async Task<IActionResult> Update(int id, [FromForm] ImageModel imageModel)
+    //{
+    //    try
+    //    {
+    //        using var memoryStream = new MemoryStream();
+    //        foreach (var item in imageModel.Images)
+    //        {
+    //            await item.CopyToAsync(memoryStream);
+    //        }
 
-            var image = new Image
-            {
-                ImageUrl = memoryStream.ToArray(),
-                ProductId = imageModel.ProductId
-            };
+    //        var image = new Image
+    //        {
+    //            ImageUrl = memoryStream.ToArray(),
+    //            ProductId = imageModel.ProductId
+    //        };
 
-            await _imageService.UpdateAsync(id, image);
-            return Ok("Updated Successfully");
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound($"record with key {id} or {imageModel.ProductId} not found");
-        }
-        catch (Exception e)
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
-        }
-    }
+    //        await _imageService.UpdateAsync(id, image);
+    //        return Ok("Updated Successfully");
+    //    }
+    //    catch (KeyNotFoundException)
+    //    {
+    //        return NotFound($"record with key {id} or {imageModel.ProductId} not found");
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+    //    }
+    //}
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)

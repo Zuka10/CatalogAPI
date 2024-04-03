@@ -21,15 +21,15 @@ public class EcommerceDbContext(DbContextOptions<EcommerceDbContext> options) : 
             .WithOne(c => c.Category)
             .HasForeignKey(c => c.CategoryId);
 
-        modelBuilder.Entity<Image>()
-            .HasOne(c => c.Product)
-            .WithMany(c => c.Images)
-            .HasForeignKey(c => c.ProductId);
+        //modelBuilder.Entity<Image>()
+        //    .HasOne(c => c.Product)
+        //    .WithMany(c => c.Images)
+        //    .HasForeignKey(c => c.ProductId);
 
-        modelBuilder.Entity<Product>()
-            .HasMany(c => c.Images)
-            .WithOne(c => c.Product)
-            .HasForeignKey(c => c.ProductId);
+        //modelBuilder.Entity<Product>()
+        //    .HasMany(c => c.Images)
+        //    .WithOne(c => c.Product)
+        //    .HasForeignKey(c => c.ProductId);
 
         modelBuilder.Entity<Product>()
             .Property(p => p.UnitPrice)

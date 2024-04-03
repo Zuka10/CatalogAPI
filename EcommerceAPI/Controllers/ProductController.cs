@@ -17,6 +17,8 @@ public class ProductController(IProductService productService) : ControllerBase
         try
         {
             var products = await _productService.GetAllAsync();
+            var baseUrl = $"{Request.Scheme}://{Request.Host}";
+
             var response = products.Select(p => new
             {
                 id = p.Id,
@@ -24,7 +26,8 @@ public class ProductController(IProductService productService) : ControllerBase
                 description = p.Description,
                 unitPrice = p.UnitPrice,
                 categoryId = p.CategoryId,
-                category = p.Category?.Name
+                category = p.Category?.Name,
+                images = p.Images!.Select(image => $"{image}")
             });
 
             return Ok(response);
@@ -51,7 +54,8 @@ public class ProductController(IProductService productService) : ControllerBase
                 description = product.Description,
                 unitPrice = product.UnitPrice,
                 categoryId = product.CategoryId,
-                category = product.Category?.Name
+                category = product.Category?.Name,
+                images = product.Images?.Select(image => $"{image}")
             };
 
             return Ok(response);
@@ -67,24 +71,51 @@ public class ProductController(IProductService productService) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(ProductModel productModel)
+    public async Task<IActionResult> Create([FromForm] ProductModel productModel)
     {
         try
         {
+            var imageUrls = new List<string>();
+
+            if (productModel.Images != null && productModel.Images.Count > 0)
+            {
+                foreach (var formFile in productModel.Images)
+                {
+                    if (formFile.Length > 0)
+                    {
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName);
+                        var filePath = Path.Combine("wwwroot/images", fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await formFile.CopyToAsync(stream);
+                        }
+
+                        imageUrls.Add("images/" + fileName);
+                    }
+                }
+            }
+
             var product = new Product
             {
                 Name = productModel.Name,
                 Description = productModel.Description,
                 UnitPrice = productModel.UnitPrice,
-                CategoryId = productModel.CategoryId
+                CategoryId = productModel.CategoryId,
+                Images = imageUrls
             };
 
             await _productService.AddAsync(product);
+
             return Ok("Created Successfully");
         }
         catch (ArgumentNullException)
         {
             return BadRequest("required property is null");
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound($"record with key {productModel.CategoryId} not found");
         }
         catch (Exception)
         {
@@ -93,7 +124,7 @@ public class ProductController(IProductService productService) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, ProductModel productModel)
+    public async Task<IActionResult> Update(int id, [FromForm] ProductModel productModel)
     {
         try
         {
