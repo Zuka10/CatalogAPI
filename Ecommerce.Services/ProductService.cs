@@ -79,8 +79,8 @@ public class ProductService(IUnitOfWork unitOfWork, EcommerceDbContext context) 
     public async Task<IEnumerable<Product>> GetAllAsync()
     {
         return await _context.Products
-            .Include(p => p.Category)
             .AsNoTracking()
+            .Include(p => p.Category)
             .ToListAsync();
     }
 
@@ -92,8 +92,9 @@ public class ProductService(IUnitOfWork unitOfWork, EcommerceDbContext context) 
     public async Task<Product> GetByIdAsync(int id)
     {
         return await _context.Products
-            .Include(p => p.Category)
             .AsNoTracking()
-            .FirstAsync();
+            .Where(p => p.Id == id)
+            .Include(p => p.Category)
+            .SingleAsync();
     }
 }

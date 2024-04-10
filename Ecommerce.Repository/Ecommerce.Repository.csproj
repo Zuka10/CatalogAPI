@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ecommerce.DTO\Ecommerce.DTO.csproj" />
+    <ProjectReference Include="..\Ecommerce.DTO\Ecommerce.Entity.csproj" />
     <ProjectReference Include="..\Ecommerce.Facade\Ecommerce.Facade.csproj" />
   </ItemGroup>
 

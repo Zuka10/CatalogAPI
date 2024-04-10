@@ -17,7 +17,6 @@ public class ProductController(IProductService productService) : ControllerBase
         try
         {
             var products = await _productService.GetAllAsync();
-            var baseUrl = $"{Request.Scheme}://{Request.Host}";
 
             var response = products.Select(p => new
             {
