@@ -26,7 +26,7 @@ public class ProductController(IProductService productService) : ControllerBase
                 unitPrice = p.UnitPrice,
                 categoryId = p.CategoryId,
                 category = p.Category?.Name,
-                images = p.Images!.Select(image => $"{image}")
+                images = p.Images?.Select(image => new {image.Id, image.ImageUrl})
             });
 
             return Ok(response);
@@ -54,7 +54,7 @@ public class ProductController(IProductService productService) : ControllerBase
                 unitPrice = product.UnitPrice,
                 categoryId = product.CategoryId,
                 category = product.Category?.Name,
-                images = product.Images?.Select(image => $"{image}")
+                images = product.Images?.Select(image => new {image.Id, image.ImageUrl})
             };
 
             return Ok(response);
@@ -74,7 +74,7 @@ public class ProductController(IProductService productService) : ControllerBase
     {
         try
         {
-            var imageUrls = new List<string>();
+            var images = new List<Image>();
 
             if (productModel.Images != null && productModel.Images.Count > 0)
             {
@@ -90,7 +90,13 @@ public class ProductController(IProductService productService) : ControllerBase
                             await formFile.CopyToAsync(stream);
                         }
 
-                        imageUrls.Add("images/" + fileName);
+                        var imageUrl = "images/" + fileName;
+                        var image = new Image
+                        {
+                            ImageUrl = imageUrl
+                        };
+
+                        images.Add(image);
                     }
                 }
             }
@@ -101,7 +107,7 @@ public class ProductController(IProductService productService) : ControllerBase
                 Description = productModel.Description,
                 UnitPrice = productModel.UnitPrice,
                 CategoryId = productModel.CategoryId,
-                Images = imageUrls
+                Images = images
             };
 
             await _productService.AddAsync(product);
@@ -127,12 +133,40 @@ public class ProductController(IProductService productService) : ControllerBase
     {
         try
         {
+            var images = new List<Image>();
+
+            if (productModel.Images != null && productModel.Images.Count > 0)
+            {
+                foreach (var formFile in productModel.Images)
+                {
+                    if (formFile.Length > 0)
+                    {
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName);
+                        var filePath = Path.Combine("wwwroot/images", fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await formFile.CopyToAsync(stream);
+                        }
+
+                        var imageUrl = "images/" + fileName;
+                        var image = new Image
+                        {
+                            ImageUrl = imageUrl
+                        };
+
+                        images.Add(image);
+                    }
+                }
+            }
+
             var product = new Product
             {
                 Name = productModel.Name,
                 Description = productModel.Description,
                 UnitPrice = productModel.UnitPrice,
-                CategoryId = productModel.CategoryId
+                CategoryId = productModel.CategoryId,
+                Images = images
             };
 
             await _productService.UpdateAsync(id, product);
@@ -151,6 +185,7 @@ public class ProductController(IProductService productService) : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
+
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)

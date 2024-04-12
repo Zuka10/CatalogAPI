@@ -7,7 +7,7 @@ public class Product
     public string? Description { get; set; }
     public decimal UnitPrice { get; set; }
 
-    public IList<string>? Images { get; set; } = new List<string>();
+    public ICollection<Image>? Images { get; set; }
     public int CategoryId { get; set; }
     public Category? Category { get; set; }
 }

@@ -20,8 +20,6 @@ public class ProductService(IUnitOfWork unitOfWork, EcommerceDbContext context) 
     public async Task AddAsync(Product product)
     {
         ArgumentNullException.ThrowIfNull(product);
-        var category = await _unitOfWork.CategoryRepository.GetAsync(product.CategoryId);
-        product.Category = category;
         await _unitOfWork.ProductRepository.InsertAsync(product);
         await _unitOfWork.SaveChangesAsync();
     }
@@ -33,14 +31,35 @@ public class ProductService(IUnitOfWork unitOfWork, EcommerceDbContext context) 
 
     public async Task<bool> UpdateAsync(int id, Product product)
     {
-        var existingProduct = await _unitOfWork.ProductRepository.GetAsync(id);
+        var existingProduct = await GetByIdAsync(id);
         if (existingProduct is not null)
         {
             existingProduct.Name = product.Name;
             existingProduct.Description = product.Description;
             existingProduct.UnitPrice = product.UnitPrice;
             existingProduct.CategoryId = product.CategoryId;
-            existingProduct.Images = product.Images;
+
+            foreach (var existingImage in existingProduct.Images.ToList())
+            {
+                // Delete from database
+                _unitOfWork.ImageRepository.Delete(existingImage);
+                // Delete from wwwroot/images directory
+                var filePath = Path.Combine("wwwroot/", existingImage.ImageUrl);
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+                existingProduct.Images.Remove(existingImage);
+            }
+
+            // Add new images
+            if (product.Images != null && product.Images.Count > 0)
+            {
+                foreach (var image in product.Images)
+                {
+                    existingProduct.Images.Add(image);
+                }
+            }
 
             await _unitOfWork.ProductRepository.UpdateAsync(existingProduct);
             await _unitOfWork.SaveChangesAsync();
@@ -48,6 +67,7 @@ public class ProductService(IUnitOfWork unitOfWork, EcommerceDbContext context) 
         }
         return false;
     }
+
 
     public void Delete(int id)
     {
@@ -81,6 +101,7 @@ public class ProductService(IUnitOfWork unitOfWork, EcommerceDbContext context) 
         return await _context.Products
             .AsNoTracking()
             .Include(p => p.Category)
+            .Include(p => p.Images)
             .ToListAsync();
     }
 
@@ -95,6 +116,7 @@ public class ProductService(IUnitOfWork unitOfWork, EcommerceDbContext context) 
             .AsNoTracking()
             .Where(p => p.Id == id)
             .Include(p => p.Category)
+            .Include(p => p.Images)
             .SingleAsync();
     }
 }
