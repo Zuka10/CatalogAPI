@@ -1,9 +1,11 @@
 ﻿using Ecommerce.DTO;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Repository;
 
-public class EcommerceDbContext(DbContextOptions<EcommerceDbContext> options) : DbContext(options)
+public class EcommerceDbContext(DbContextOptions<EcommerceDbContext> options) : IdentityDbContext<IdentityUser>(options)
 {
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
