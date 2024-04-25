@@ -1,8 +1,12 @@
-﻿using Ecommerce.Facade.Repositories;
-using Ecommerce.Facade.Services;
+﻿using Ecommerce.Facade.Services;
 using Ecommerce.Repository;
 using Ecommerce.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 
 namespace EcommerceAPI;
 
@@ -15,7 +19,27 @@ public class Startup(IConfiguration configuration)
         services.AddControllers();
         services.AddDbContext<EcommerceDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("MSSQLTest")));
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<EcommerceDbContext>()
+                .AddDefaultTokenProviders();
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
+        {
+            options.SaveToken = true;
+            options.RequireHttpsMetadata = false;
+            options.TokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidAudience = Configuration["JWT:ValidAudience"],
+                ValidIssuer = Configuration["JWT:ValidIssuer"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]!))
+            };
+        });
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddCors(options =>
@@ -30,7 +54,33 @@ public class Startup(IConfiguration configuration)
                 });
         });
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Catalog API", Version = "v1" });
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Please enter a valid token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "Bearer"
+            });
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type=ReferenceType.SecurityScheme,
+                            Id="Bearer"
+                        }
+                },
+                new string[]{}
+            }
+            });
+        });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -42,6 +92,7 @@ public class Startup(IConfiguration configuration)
 
         app.UseStaticFiles();
         app.UseRouting();
+        app.UseAuthentication();
         app.UseAuthorization();
         app.UseCors("SpecificOrigins");
         app.UseEndpoints(endpoints =>

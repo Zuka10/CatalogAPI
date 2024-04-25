@@ -1,6 +1,7 @@
 ﻿using Ecommerce.API.Models;
 using Ecommerce.DTO;
 using Ecommerce.Facade.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.API.Controllers;
@@ -70,6 +71,7 @@ public class ProductController(IProductService productService) : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Create([FromForm] ProductModel productModel)
     {
         try
@@ -129,6 +131,7 @@ public class ProductController(IProductService productService) : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize]
     public async Task<IActionResult> Update(int id, [FromForm] ProductModel productModel)
     {
         try
@@ -188,6 +191,7 @@ public class ProductController(IProductService productService) : ControllerBase
 
 
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
         try

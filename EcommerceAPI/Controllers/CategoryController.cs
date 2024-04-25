@@ -1,5 +1,6 @@
 ﻿using Ecommerce.DTO;
 using Ecommerce.Facade.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.API.Controllers;
@@ -58,6 +59,7 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Create([FromForm] string name)
     {
         try
@@ -74,6 +76,7 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
     }
 
     [HttpPut("{id}")]
+    [Authorize]
     public async Task<IActionResult> Update(int id, [FromForm] string name)
     {
         try
@@ -93,6 +96,7 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
         try
