@@ -83,6 +83,6 @@ public class ProductService(EcommerceDbContext context) : IProductService
             .Where(p => p.Id == id)
             .Include(p => p.Category)
             .Include(p => p.Images)
-            .SingleAsync();
+            .SingleOrDefaultAsync();
     }
 }
