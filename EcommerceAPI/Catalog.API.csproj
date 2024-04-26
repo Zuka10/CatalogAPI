@@ -18,9 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ecommerce.Facade\Ecommerce.Facade.csproj" />
-    <ProjectReference Include="..\Ecommerce.Repository\Ecommerce.Repository.csproj" />
-    <ProjectReference Include="..\Ecommerce.Services\Ecommerce.Service.csproj" />
+    <ProjectReference Include="..\Ecommerce.Facade\Catalog.Facade.csproj" />
+    <ProjectReference Include="..\Ecommerce.Repository\Catalog.Repository.csproj" />
+    <ProjectReference Include="..\Ecommerce.Services\Catalog.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>

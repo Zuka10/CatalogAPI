@@ -8,6 +8,7 @@ namespace Ecommerce.API.Controllers;
 
 [Route("[controller]")]
 [ApiController]
+[Authorize]
 public class ProductController(IProductService productService) : ControllerBase
 {
     private readonly IProductService _productService = productService;
@@ -45,7 +46,7 @@ public class ProductController(IProductService productService) : ControllerBase
         {
             var product = await _productService.GetByIdAsync(id);
             if (product is null)
-                return NotFound();
+                return NotFound($"record with key {id} not found");
 
             var response = new
             {
@@ -60,10 +61,6 @@ public class ProductController(IProductService productService) : ControllerBase
 
             return Ok(response);
         }
-        catch (KeyNotFoundException)
-        {
-            return NotFound($"record with key {id} not found");
-        }
         catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
@@ -71,7 +68,6 @@ public class ProductController(IProductService productService) : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
     public async Task<IActionResult> Create([FromForm] ProductModel productModel)
     {
         try
@@ -131,7 +127,6 @@ public class ProductController(IProductService productService) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize]
     public async Task<IActionResult> Update(int id, [FromForm] ProductModel productModel)
     {
         try
@@ -172,11 +167,9 @@ public class ProductController(IProductService productService) : ControllerBase
                 Images = images
             };
 
-            await _productService.UpdateAsync(id, product);
-            return Ok("Updated successfully");
-        }
-        catch (KeyNotFoundException)
-        {
+            if (await _productService.UpdateAsync(id, product))
+                return Ok("Updated successfully");
+
             return NotFound($"record with key {id} not found");
         }
         catch (ArgumentNullException)
@@ -191,16 +184,13 @@ public class ProductController(IProductService productService) : ControllerBase
 
 
     [HttpDelete("{id}")]
-    [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
         try
         {
-            await _productService.DeleteAsync(id);
-            return Ok("Deleted Successfully");
-        }
-        catch (KeyNotFoundException)
-        {
+            if(await _productService.DeleteAsync(id))
+                return Ok("Deleted Successfully");
+
             return NotFound($"record with key {id} not found");
         }
         catch (Exception)

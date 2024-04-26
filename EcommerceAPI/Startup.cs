@@ -76,9 +76,9 @@ public class Startup(IConfiguration configuration)
                             Type=ReferenceType.SecurityScheme,
                             Id="Bearer"
                         }
-                },
-                new string[]{}
-            }
+                    },
+                    Array.Empty<string>()
+                }
             });
         });
     }

@@ -1,5 +1,6 @@
 ﻿using Ecommerce.API.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -110,6 +111,7 @@ namespace Ecommerce.API.Controllers
 
         [HttpPost]
         [Route("logout")]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);

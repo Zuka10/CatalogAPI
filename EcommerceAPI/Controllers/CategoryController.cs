@@ -7,6 +7,7 @@ namespace Ecommerce.API.Controllers;
 
 [Route("[controller]")]
 [ApiController]
+[Authorize]
 public class CategoryController(ICategoryService categoryService) : ControllerBase
 {
     private readonly ICategoryService _categoryService = categoryService;
@@ -38,7 +39,7 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
         {
             var category = await _categoryService.GetByIdAsync(id);
             if (category is null)
-                return NotFound();
+                return NotFound($"record with key {id} not found");
 
             var response = new
             {
@@ -48,10 +49,6 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
 
             return Ok(response);
         }
-        catch (KeyNotFoundException)
-        {
-            return NotFound($"record with key {id} not found");
-        }
         catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
@@ -59,14 +56,12 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
     }
 
     [HttpPost]
-    [Authorize]
     public async Task<IActionResult> Create([FromForm] string name)
     {
         try
         {
             var category = new Category { Name = name };
             await _categoryService.AddAsync(category);
-            Console.WriteLine(name);
             return Ok("Created Successfully");
         }
         catch (Exception)
@@ -76,17 +71,14 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
     }
 
     [HttpPut("{id}")]
-    [Authorize]
     public async Task<IActionResult> Update(int id, [FromForm] string name)
     {
         try
         {
             var category = new Category { Name = name };
-            await _categoryService.UpdateAsync(id, category);
-            return Ok("Updated Successfully");
-        }
-        catch (KeyNotFoundException)
-        {
+            if (await _categoryService.UpdateAsync(id, category))
+                return Ok("Updated Successfully");
+
             return NotFound($"record with key {id} not found");
         }
         catch (Exception)
@@ -96,16 +88,13 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
     }
 
     [HttpDelete("{id}")]
-    [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
         try
         {
-            await _categoryService.DeleteAsync(id);
-            return Ok("Deleted Successfully");
-        }
-        catch (KeyNotFoundException)
-        {
+            if (await _categoryService.DeleteAsync(id))
+                return Ok("Deleted Successfully");
+
             return NotFound($"record with key {id} not found");
         }
         catch (Exception)

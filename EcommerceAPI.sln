@@ -3,21 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecommerce.API", "EcommerceAPI\Ecommerce.API.csproj", "{65C8EC83-FED8-4C90-A406-17D5D2791227}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.API", "EcommerceAPI\Catalog.API.csproj", "{65C8EC83-FED8-4C90-A406-17D5D2791227}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecommerce.Repository", "Ecommerce.Repository\Ecommerce.Repository.csproj", "{5A1281C4-DD9D-4B41-8ACD-308FD9EDB80B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Repository", "Ecommerce.Repository\Catalog.Repository.csproj", "{5A1281C4-DD9D-4B41-8ACD-308FD9EDB80B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{43B75A62-7387-431D-87FD-53A7B80EE981} = {43B75A62-7387-431D-87FD-53A7B80EE981}
 		{ADC42103-F80D-4D74-A1BF-B46F93E93196} = {ADC42103-F80D-4D74-A1BF-B46F93E93196}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecommerce.Service", "Ecommerce.Services\Ecommerce.Service.csproj", "{18E3F768-9F6F-4FA5-A319-AF143864A38A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Service", "Ecommerce.Services\Catalog.Service.csproj", "{18E3F768-9F6F-4FA5-A319-AF143864A38A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecommerce.Test", "Ecommerce.Test\Ecommerce.Test.csproj", "{1FD8631E-211F-4DA0-B16A-F0EE1CDFB2FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Test", "Ecommerce.Test\Catalog.Test.csproj", "{1FD8631E-211F-4DA0-B16A-F0EE1CDFB2FE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecommerce.Facade", "Ecommerce.Facade\Ecommerce.Facade.csproj", "{ADC42103-F80D-4D74-A1BF-B46F93E93196}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Facade", "Ecommerce.Facade\Catalog.Facade.csproj", "{ADC42103-F80D-4D74-A1BF-B46F93E93196}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecommerce.Entity", "Ecommerce.DTO\Ecommerce.Entity.csproj", "{43B75A62-7387-431D-87FD-53A7B80EE981}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Entity", "Ecommerce.DTO\Catalog.Entity.csproj", "{43B75A62-7387-431D-87FD-53A7B80EE981}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
