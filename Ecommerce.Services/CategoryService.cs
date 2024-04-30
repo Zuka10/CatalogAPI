@@ -11,6 +11,7 @@ public class CategoryService(EcommerceDbContext context) : ICategoryService
 
     public async Task AddAsync(Category category)
     {
+        ArgumentNullException.ThrowIfNull(category);
         await _context.Categories.AddAsync(category);
         await _context.SaveChangesAsync();
     }
