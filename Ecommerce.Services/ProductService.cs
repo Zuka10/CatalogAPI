@@ -21,9 +21,9 @@ public class ProductService(EcommerceDbContext context) : IProductService
     {
         try
         {
-            var existingProduct = await _context.Products.Where(p => p.Id == id)
+            var existingProduct = await _context.Products
                 .Include(p => p.Images)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync(p => p.Id == id);
 
             if (existingProduct is not null)
             {
