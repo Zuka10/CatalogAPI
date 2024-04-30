@@ -2,6 +2,7 @@
 using Ecommerce.Facade.Services;
 using Ecommerce.Repository;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace Ecommerce.Service;
 
@@ -18,41 +19,50 @@ public class ProductService(EcommerceDbContext context) : IProductService
 
     public async Task<bool> UpdateAsync(int id, Product product)
     {
-        var existingProduct = await GetByIdAsync(id);
-        if (existingProduct is not null)
+        try
         {
-            existingProduct.Name = product.Name;
-            existingProduct.Description = product.Description;
-            existingProduct.UnitPrice = product.UnitPrice;
-            existingProduct.CategoryId = product.CategoryId;
+            var existingProduct = await _context.Products.Where(p => p.Id == id)
+                .Include(p => p.Images)
+                .SingleOrDefaultAsync();
 
-            foreach (var existingImage in existingProduct.Images.ToList())
+            if (existingProduct is not null)
             {
-                // Delete from database
-                _context.Images.Remove(existingImage);
-                // Delete from wwwroot/images directory
-                var filePath = Path.Combine("wwwroot/", existingImage.ImageUrl);
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                }
-                existingProduct.Images.Remove(existingImage);
-            }
+                existingProduct.Name = product.Name;
+                existingProduct.Description = product.Description;
+                existingProduct.UnitPrice = product.UnitPrice;
+                existingProduct.CategoryId = product.CategoryId;
 
-            // Add new images
-            if (product.Images != null && product.Images.Count > 0)
-            {
-                foreach (var image in product.Images)
+                foreach (var existingImage in existingProduct.Images!.ToList())
                 {
-                    existingProduct.Images.Add(image);
+                    // Delete from database
+                    _context.Images.Remove(existingImage);
+                    // Delete from wwwroot/images directory
+                    var filePath = Path.Combine("wwwroot/", existingImage.ImageUrl);
+                    if (File.Exists(filePath))
+                    {
+                        File.Delete(filePath);
+                    }
+                    existingProduct.Images.Remove(existingImage);
                 }
-            }
 
-            _context.Products.Update(existingProduct);
-            await _context.SaveChangesAsync();
-            return true;
+                // Add new images
+                if (product.Images != null && product.Images.Count > 0)
+                {
+                    foreach (var image in product.Images)
+                    {
+                        existingProduct.Images.Add(image);
+                    }
+                }
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
-        return false;
+        catch (Exception)
+        {
+            throw;
+        }
+        
     }
 
     public async Task<bool> DeleteAsync(int id)
