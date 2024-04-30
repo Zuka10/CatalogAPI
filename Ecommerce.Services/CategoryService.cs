@@ -48,6 +48,6 @@ public class CategoryService(EcommerceDbContext context) : ICategoryService
 
     public async Task<Category> GetByIdAsync(int id)
     {
-        return await _context.Categories.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+        return await _context.Categories.AsNoTracking().SingleOrDefaultAsync(c => c.Id == id);
     }
 }
