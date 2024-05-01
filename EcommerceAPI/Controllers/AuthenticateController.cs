@@ -1,4 +1,5 @@
-﻿using Ecommerce.API.Models;
+﻿using Catalog.Facade.Services;
+using Ecommerce.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +8,14 @@ namespace Ecommerce.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticateController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) : ControllerBase
+    public class AuthenticateController(
+        UserManager<IdentityUser> userManager,
+        SignInManager<IdentityUser> signInManager,
+        IEmailService emailService) : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager = userManager;
         private readonly SignInManager<IdentityUser> _signInManager = signInManager;
+        private readonly IEmailService _emailService = emailService;
 
         [HttpPost]
         [Route("login")]
@@ -44,7 +49,22 @@ namespace Ecommerce.API.Controllers
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status400BadRequest, "User creation failed! Please check user details and try again.");
 
+            await _emailService.SendConfirmationEmail(model.Email, user);
             return Ok("User created Successfully!");
+        }
+
+        [HttpGet]
+        [Route("confirmEmail")]
+        public async Task<string> ConfirmEmail(string userId, string token)
+        {
+            try
+            {
+                return await _emailService.ConfirmEmail(userId, token);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [HttpPost]

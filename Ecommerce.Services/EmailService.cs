@@ -1,13 +1,15 @@
 ﻿using Catalog.Facade.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;
 
 namespace Catalog.Service;
 
-public class EmailService(IConfiguration configuration) : IEmailService
+public class EmailService(IConfiguration configuration, UserManager<IdentityUser> userManager) : IEmailService
 {
     private readonly IConfiguration _configuration = configuration;
+    private readonly UserManager<IdentityUser> _userManager = userManager;
 
     public Task SendEmailAsync(string toEmail, string subject, string body, bool isBodyHTML)
     {
@@ -27,5 +29,38 @@ public class EmailService(IConfiguration configuration) : IEmailService
         };
 
         return client.SendMailAsync(mailMessage);
+    }
+
+    public async Task SendConfirmationEmail(string email, IdentityUser user)
+    {
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var confirmationLink = $"https://localhost:7215/confirm-email?UserId={user.Id}&Token={token}";
+        await SendEmailAsync(email, "Confirm Your Email", $"Please confirm your account by <a href='{confirmationLink}'>clicking here</a>;.", true);
+    }
+
+    public async Task<string> ConfirmEmail(string userId, string token)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (userId is null || token is null)
+        {
+            return "Link expired";
+        }
+        else if (user is null)
+        {
+            return "User not found";
+        }
+        else
+        {
+            token = token.Replace(" ", "+");
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return "Thank you for confirming email";
+            }
+            else
+            {
+                return "Email not confirmed";
+            }
+        }
     }
 }
