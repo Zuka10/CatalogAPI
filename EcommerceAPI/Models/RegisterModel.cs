@@ -12,5 +12,6 @@ public class RegisterModel
 
     [Required(ErrorMessage = "Password is required")]
     [MinLength(8), MaxLength(16)]
+    [DataType(DataType.Password)]
     public required string? Password { get; set; }
 }

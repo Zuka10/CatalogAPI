@@ -2,7 +2,6 @@
 using Ecommerce.Facade.Services;
 using Ecommerce.Repository;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 
 namespace Ecommerce.Service;
 
@@ -62,7 +61,7 @@ public class ProductService(EcommerceDbContext context) : IProductService
         {
             throw;
         }
-        
+
     }
 
     public async Task<bool> DeleteAsync(int id)
