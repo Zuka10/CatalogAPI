@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Ecommerce.Facade\Catalog.Facade.csproj" />
-    <ProjectReference Include="..\Ecommerce.Repository\Catalog.Repository.csproj" />
+    <ProjectReference Include="..\Ecommerce.Repository\Catalog.Infrastructure.csproj" />
     <ProjectReference Include="..\Ecommerce.Services\Catalog.Service.csproj" />
   </ItemGroup>
 

@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ecommerce.DTO\Catalog.Entity.csproj" />
+    <ProjectReference Include="..\Ecommerce.DTO\Catalog.Domain.csproj" />
     <ProjectReference Include="..\Ecommerce.Facade\Catalog.Facade.csproj" />
   </ItemGroup>
 

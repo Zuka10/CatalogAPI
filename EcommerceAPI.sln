@@ -5,7 +5,7 @@ VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.API", "EcommerceAPI\Catalog.API.csproj", "{65C8EC83-FED8-4C90-A406-17D5D2791227}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Repository", "Ecommerce.Repository\Catalog.Repository.csproj", "{5A1281C4-DD9D-4B41-8ACD-308FD9EDB80B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Infrastructure", "Ecommerce.Repository\Catalog.Infrastructure.csproj", "{5A1281C4-DD9D-4B41-8ACD-308FD9EDB80B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{43B75A62-7387-431D-87FD-53A7B80EE981} = {43B75A62-7387-431D-87FD-53A7B80EE981}
 		{ADC42103-F80D-4D74-A1BF-B46F93E93196} = {ADC42103-F80D-4D74-A1BF-B46F93E93196}
@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Test", "Ecommerce.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Facade", "Ecommerce.Facade\Catalog.Facade.csproj", "{ADC42103-F80D-4D74-A1BF-B46F93E93196}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Entity", "Ecommerce.DTO\Catalog.Entity.csproj", "{43B75A62-7387-431D-87FD-53A7B80EE981}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Domain", "Ecommerce.DTO\Catalog.Domain.csproj", "{43B75A62-7387-431D-87FD-53A7B80EE981}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
