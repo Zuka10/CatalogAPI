@@ -36,6 +36,7 @@ public class ProductController(IProductService productService) : ControllerBase
         catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
+            throw;
         }
     }
 
@@ -64,6 +65,7 @@ public class ProductController(IProductService productService) : ControllerBase
         catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
+            throw;
         }
     }
 
@@ -123,6 +125,7 @@ public class ProductController(IProductService productService) : ControllerBase
         catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
+            throw;
         }
     }
 
@@ -179,6 +182,7 @@ public class ProductController(IProductService productService) : ControllerBase
         catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
+            throw;
         }
     }
 
@@ -196,6 +200,7 @@ public class ProductController(IProductService productService) : ControllerBase
         catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
+            throw;
         }
     }
 }

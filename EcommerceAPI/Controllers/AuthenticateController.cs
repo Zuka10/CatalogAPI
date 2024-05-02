@@ -63,6 +63,7 @@ namespace Ecommerce.API.Controllers
             }
             catch (Exception)
             {
+                return "Email confirmation failed";
                 throw;
             }
         }

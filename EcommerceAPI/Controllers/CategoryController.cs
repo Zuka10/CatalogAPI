@@ -29,6 +29,7 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
         catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
+            throw;
         }
     }
 
@@ -52,6 +53,7 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
         catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
+            throw;
         }
     }
 
@@ -67,6 +69,7 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
         catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
+            throw;
         }
     }
 
@@ -84,6 +87,7 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
         catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
+            throw;
         }
     }
 
@@ -100,6 +104,7 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
         catch (Exception)
         {
             return StatusCode(StatusCodes.Status500InternalServerError);
+            throw;
         }
     }
 }
