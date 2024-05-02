@@ -1,8 +1,5 @@
-﻿using Catalog.Facade.Services;
-using Catalog.Service;
-using Ecommerce.Facade.Services;
+﻿using Catalog.API;
 using Ecommerce.Repository;
-using Ecommerce.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,9 +17,7 @@ public class Startup(IConfiguration configuration)
         services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<EcommerceDbContext>()
                 .AddDefaultTokenProviders();
-        services.AddScoped<ICategoryService, CategoryService>();
-        services.AddScoped<IProductService, ProductService>();
-        services.AddTransient<IEmailService, EmailService>();
+        services.AddAplicationServices();
         services.ConfigureApplicationCookie(options =>
         {
             options.Cookie.HttpOnly = true;
