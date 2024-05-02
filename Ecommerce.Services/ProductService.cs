@@ -41,7 +41,7 @@ public class ProductService(EcommerceDbContext context) : IProductService
                     {
                         File.Delete(filePath);
                     }
-                    existingProduct.Images.Remove(existingImage);
+                    existingProduct.Images?.Remove(existingImage);
                 }
 
                 // Add new images
@@ -49,7 +49,7 @@ public class ProductService(EcommerceDbContext context) : IProductService
                 {
                     foreach (var image in product.Images)
                     {
-                        existingProduct.Images.Add(image);
+                        existingProduct.Images?.Add(image);
                     }
                 }
                 await _context.SaveChangesAsync();

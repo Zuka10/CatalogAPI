@@ -45,11 +45,11 @@ namespace Ecommerce.API.Controllers
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.UserName
             };
-            var result = await userManager.CreateAsync(user, model.Password);
+            var result = await userManager.CreateAsync(user, model.Password!);
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status400BadRequest, "User creation failed! Please check user details and try again.");
 
-            await _emailService.SendConfirmationEmail(model.Email, user);
+            await _emailService.SendConfirmationEmail(model.Email!, user);
             return Ok("User created Successfully!");
         }
 
