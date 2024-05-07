@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.RateLimiting;
 
 namespace Ecommerce.API.Controllers;
 
-[Route("[controller]")]
+[Route("api/categories")]
 [ApiController]
 [Authorize]
 [EnableRateLimiting("fixed")]

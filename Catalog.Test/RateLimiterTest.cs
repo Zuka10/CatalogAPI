@@ -35,7 +35,7 @@ namespace Catalog.Test
         [Test]
         public void TestRateLimit()
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 6; i++)
             {
                 var formData = new List<KeyValuePair<string, string>>
                 {
@@ -43,7 +43,7 @@ namespace Catalog.Test
                     new("password", "Pass1234!")
                 };
                 var content = new FormUrlEncodedContent(formData);
-                var response = _client.PostAsync("/api/Authenticate/login", content).Result;
+                var response = _client.PostAsync("/api/authenticate/login", content).Result;
                 if (i < 5)
                 {
                     Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);

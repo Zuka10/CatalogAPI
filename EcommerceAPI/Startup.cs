@@ -18,11 +18,7 @@ public class Startup(IConfiguration configuration)
                 .AddEntityFrameworkStores<EcommerceDbContext>()
                 .AddDefaultTokenProviders();
         services.AddAplicationServices();
-        services.ConfigureApplicationCookie(options =>
-        {
-            options.Cookie.HttpOnly = true;
-            options.ExpireTimeSpan = TimeSpan.FromHours(1);
-        });
+        services.ConfigureCookies();
         services.AddCors(options =>
         {
             options.AddPolicy("SpecificOrigins",
@@ -57,7 +53,7 @@ public class Startup(IConfiguration configuration)
         app.UseRateLimiter();
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapControllers().RequireRateLimiting("fixed");
+            endpoints.MapDefaultControllerRoute().RequireRateLimiting("fixed");
         });
     }
 }

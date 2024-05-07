@@ -17,6 +17,22 @@ public static class DependecyInjection
         return services;
     }
 
+    public static IServiceCollection ConfigureCookies(this IServiceCollection services)
+    {
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.Events.OnRedirectToLogin = context =>
+            {
+                context.Response.StatusCode = 401;
+                return Task.CompletedTask;
+            };
+            options.Cookie.HttpOnly = true;
+            options.ExpireTimeSpan = TimeSpan.FromHours(1);
+        });
+
+        return services;
+    }
+
     public static IServiceCollection AddFixedWindowRateLimiter(this IServiceCollection services)
     {
         services.AddRateLimiter(o =>
@@ -31,9 +47,7 @@ public static class DependecyInjection
                     return RateLimitPartition.GetFixedWindowLimiter("default", _ => new FixedWindowRateLimiterOptions
                     {
                         PermitLimit = 5,
-                        Window = TimeSpan.FromSeconds(10),
-                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-                        QueueLimit = 2
+                        Window = TimeSpan.FromSeconds(10)
                     });
                 }
 
@@ -41,9 +55,7 @@ public static class DependecyInjection
                 return RateLimitPartition.GetFixedWindowLimiter(ipAddress, _ => new FixedWindowRateLimiterOptions
                 {
                     PermitLimit = 5,
-                    Window = TimeSpan.FromSeconds(10),
-                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-                    QueueLimit = 2
+                    Window = TimeSpan.FromSeconds(10)
                 });
             });
         });
