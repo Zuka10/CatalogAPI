@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Service;
 
-public class ProductService(EcommerceDbContext context) : IProductService
+public class ProductService(CatalogDbContext context) : IProductService
 {
-    private readonly EcommerceDbContext _context = context;
+    private readonly CatalogDbContext _context = context;
 
     public async Task AddAsync(Product product)
     {

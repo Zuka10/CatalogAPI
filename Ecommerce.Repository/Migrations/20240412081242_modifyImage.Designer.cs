@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ecommerce.Repository.Migrations
 {
-    [DbContext(typeof(EcommerceDbContext))]
+    [DbContext(typeof(CatalogDbContext))]
     [Migration("20240412081242_modifyImage")]
     partial class modifyImage
     {

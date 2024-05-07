@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Repository;
 
-public class EcommerceDbContext(DbContextOptions<EcommerceDbContext> options) : IdentityDbContext<IdentityUser>(options)
+public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : IdentityDbContext<IdentityUser>(options)
 {
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }

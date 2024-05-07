@@ -12,10 +12,10 @@ public class Startup(IConfiguration configuration)
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
-        services.AddDbContext<EcommerceDbContext>(options =>
+        services.AddDbContext<CatalogDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("MSSQLTest")));
         services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<EcommerceDbContext>()
+                .AddEntityFrameworkStores<CatalogDbContext>()
                 .AddDefaultTokenProviders();
         services.AddAplicationServices();
         services.ConfigureCookies();
