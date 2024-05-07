@@ -34,6 +34,7 @@ public class Startup(IConfiguration configuration)
                     policy.AllowCredentials();
                 });
         });
+        services.AddFixedWindowRateLimiter();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
         {
@@ -53,9 +54,10 @@ public class Startup(IConfiguration configuration)
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseCors("SpecificOrigins");
+        app.UseRateLimiter();
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapControllers();
+            endpoints.MapControllers().RequireRateLimiting("fixed");
         });
     }
 }

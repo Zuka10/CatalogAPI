@@ -3,12 +3,14 @@ using Ecommerce.DTO;
 using Ecommerce.Facade.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Ecommerce.API.Controllers;
 
 [Route("[controller]")]
 [ApiController]
 [Authorize]
+[EnableRateLimiting("fixed")]
 public class ProductController(IProductService productService) : ControllerBase
 {
     private readonly IProductService _productService = productService;

@@ -3,11 +3,13 @@ using Ecommerce.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Ecommerce.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableRateLimiting("fixed")]
     public class AuthenticateController(
         UserManager<IdentityUser> userManager,
         SignInManager<IdentityUser> signInManager,

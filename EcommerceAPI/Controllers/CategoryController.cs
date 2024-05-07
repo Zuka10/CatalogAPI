@@ -2,12 +2,14 @@
 using Ecommerce.Facade.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Ecommerce.API.Controllers;
 
 [Route("[controller]")]
 [ApiController]
 [Authorize]
+[EnableRateLimiting("fixed")]
 public class CategoryController(ICategoryService categoryService) : ControllerBase
 {
     private readonly ICategoryService _categoryService = categoryService;
