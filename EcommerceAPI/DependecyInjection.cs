@@ -21,8 +21,8 @@ public static class DependecyInjection
     {
         services.AddRateLimiter(o =>
         {
-            o.RejectionStatusCode = 429;
-            o.AddPolicy<string>("fixed", httpContext =>
+            o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            o.AddPolicy("fixed", httpContext =>
             {
                 var ipAddress = httpContext.Connection.RemoteIpAddress?.ToString();
                 if (string.IsNullOrEmpty(ipAddress))
@@ -31,7 +31,9 @@ public static class DependecyInjection
                     return RateLimitPartition.GetFixedWindowLimiter("default", _ => new FixedWindowRateLimiterOptions
                     {
                         PermitLimit = 5,
-                        Window = TimeSpan.FromSeconds(10)
+                        Window = TimeSpan.FromSeconds(10),
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        QueueLimit = 2
                     });
                 }
 
@@ -39,7 +41,9 @@ public static class DependecyInjection
                 return RateLimitPartition.GetFixedWindowLimiter(ipAddress, _ => new FixedWindowRateLimiterOptions
                 {
                     PermitLimit = 5,
-                    Window = TimeSpan.FromSeconds(10)
+                    Window = TimeSpan.FromSeconds(10),
+                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                    QueueLimit = 2
                 });
             });
         });
