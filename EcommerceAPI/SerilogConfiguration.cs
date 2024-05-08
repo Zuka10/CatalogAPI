@@ -1,9 +1,9 @@
 ﻿using Serilog;
 using Serilog.Formatting.Json;
 
-namespace Catalog.API.Middlewares;
+namespace Catalog.API;
 
-public static class SerilogMiddleware
+public static class SerilogConfiguration
 {
     public static void ConfigureSerilog()
     {

@@ -33,7 +33,7 @@ public class Startup(IConfiguration configuration)
     {
         app.UseSwagger();
         app.UseSwaggerUI();
-        SerilogMiddleware.ConfigureSerilog();
+        SerilogConfiguration.ConfigureSerilog();
         app.UseHttpsRedirection();
 
         app.UseStaticFiles();
@@ -44,7 +44,7 @@ public class Startup(IConfiguration configuration)
         app.UseRateLimiter();
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapDefaultControllerRoute().RequireRateLimiting("fixed");
+            endpoints.MapControllers().RequireRateLimiting("fixed");
         });
     }
 }
