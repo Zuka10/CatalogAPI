@@ -1,4 +1,5 @@
 ﻿using Catalog.API;
+using Catalog.API.Middlewares;
 using Ecommerce.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,17 +20,7 @@ public class Startup(IConfiguration configuration)
                 .AddDefaultTokenProviders();
         services.AddAplicationServices();
         services.ConfigureCookies();
-        services.AddCors(options =>
-        {
-            options.AddPolicy("SpecificOrigins",
-                policy =>
-                {
-                    policy.WithOrigins("http://localhost:5173");
-                    policy.AllowAnyMethod();
-                    policy.AllowAnyHeader();
-                    policy.AllowCredentials();
-                });
-        });
+        services.ConfigureCors();
         services.AddFixedWindowRateLimiter();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
