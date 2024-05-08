@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Serilog;
 
 namespace Ecommerce.API.Controllers
 {
@@ -27,7 +28,6 @@ namespace Ecommerce.API.Controllers
             if (user is not null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
-
                 return Ok();
             }
             return Unauthorized();

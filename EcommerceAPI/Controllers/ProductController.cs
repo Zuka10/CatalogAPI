@@ -4,6 +4,7 @@ using Ecommerce.Facade.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Serilog;
 
 namespace Ecommerce.API.Controllers;
 
@@ -35,10 +36,10 @@ public class ProductController(IProductService productService) : ControllerBase
 
             return Ok(response);
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Log.Error(e.Message);
             return StatusCode(StatusCodes.Status500InternalServerError);
-            throw;
         }
     }
 
@@ -64,10 +65,10 @@ public class ProductController(IProductService productService) : ControllerBase
 
             return Ok(response);
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Log.Error(e.Message);
             return StatusCode(StatusCodes.Status500InternalServerError);
-            throw;
         }
     }
 
@@ -124,10 +125,10 @@ public class ProductController(IProductService productService) : ControllerBase
         {
             return NotFound($"record with key {productModel.CategoryId} not found");
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Log.Error(e.Message);
             return StatusCode(StatusCodes.Status500InternalServerError);
-            throw;
         }
     }
 
@@ -181,10 +182,10 @@ public class ProductController(IProductService productService) : ControllerBase
         {
             return BadRequest("required property is null");
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Log.Error(e.Message);
             return StatusCode(StatusCodes.Status500InternalServerError);
-            throw;
         }
     }
 
@@ -199,10 +200,10 @@ public class ProductController(IProductService productService) : ControllerBase
 
             return NotFound($"record with key {id} not found");
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Log.Error(e.Message);
             return StatusCode(StatusCodes.Status500InternalServerError);
-            throw;
         }
     }
 }

@@ -2,6 +2,7 @@
 using Ecommerce.Facade.Services;
 using Ecommerce.Repository;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Ecommerce.Service;
 
@@ -57,8 +58,9 @@ public class ProductService(CatalogDbContext context) : IProductService
             }
             return false;
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Log.Error($"error occured while updating product: {e.Message}");
             throw;
         }
 

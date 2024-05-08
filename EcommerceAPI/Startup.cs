@@ -33,7 +33,7 @@ public class Startup(IConfiguration configuration)
     {
         app.UseSwagger();
         app.UseSwaggerUI();
-
+        SerilogMiddleware.ConfigureSerilog();
         app.UseHttpsRedirection();
 
         app.UseStaticFiles();

@@ -3,6 +3,7 @@ using Ecommerce.Facade.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Serilog;
 
 namespace Ecommerce.API.Controllers;
 
@@ -25,13 +26,16 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
                 id = c.Id,
                 name = c.Name
             });
-
+            Log.Information("info");
+            Log.Debug("debug");
+            Log.Error("error");
+            Log.Fatal("fatal");
             return Ok(response);
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Log.Error(e.Message);
             return StatusCode(StatusCodes.Status500InternalServerError);
-            throw;
         }
     }
 
@@ -52,10 +56,10 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
 
             return Ok(response);
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Log.Error(e.Message);
             return StatusCode(StatusCodes.Status500InternalServerError);
-            throw;
         }
     }
 
@@ -68,10 +72,10 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
             await _categoryService.AddAsync(category);
             return Ok("Created Successfully");
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Log.Error(e.Message);
             return StatusCode(StatusCodes.Status500InternalServerError);
-            throw;
         }
     }
 
@@ -86,10 +90,10 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
 
             return NotFound($"record with key {id} not found");
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Log.Error(e.Message);
             return StatusCode(StatusCodes.Status500InternalServerError);
-            throw;
         }
     }
 
@@ -103,10 +107,10 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
 
             return NotFound($"record with key {id} not found");
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Log.Error(e.Message);
             return StatusCode(StatusCodes.Status500InternalServerError);
-            throw;
         }
     }
 }
