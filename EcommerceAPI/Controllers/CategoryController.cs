@@ -26,10 +26,7 @@ public class CategoryController(ICategoryService categoryService) : ControllerBa
                 id = c.Id,
                 name = c.Name
             });
-            Log.Information("info");
-            Log.Debug("debug");
-            Log.Error("error");
-            Log.Fatal("fatal");
+
             return Ok(response);
         }
         catch (Exception e)
