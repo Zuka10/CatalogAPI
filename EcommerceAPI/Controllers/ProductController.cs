@@ -73,7 +73,7 @@ public class ProductController(IProductService productService) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromForm] ProductModel productModel)
+    public async Task<IActionResult> Create([FromForm] ProductDTO productModel)
     {
         try
         {
@@ -133,7 +133,7 @@ public class ProductController(IProductService productService) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromForm] ProductModel productModel)
+    public async Task<IActionResult> Update(int id, [FromForm] ProductDTO productModel)
     {
         try
         {

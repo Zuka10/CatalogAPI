@@ -1,6 +1,6 @@
 ﻿namespace Ecommerce.API.Models;
 
-public class ProductModel
+public class ProductDTO
 {
     public required string Name { get; set; }
     public string? Description { get; set; }
