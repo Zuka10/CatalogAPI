@@ -1,4 +1,5 @@
-﻿using Ecommerce.DTO;
+﻿using Catalog.Domain;
+using Ecommerce.DTO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,8 @@ public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : Iden
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Image> Images { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderDetail> OrderDetails { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -35,6 +38,20 @@ public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : Iden
 
         modelBuilder.Entity<Product>()
             .Property(p => p.UnitPrice)
+            .HasColumnType("money");
+
+        modelBuilder.Entity<OrderDetail>()
+            .HasOne(c => c.Order)
+            .WithMany(c => c.OrderDetails)
+            .HasForeignKey(c => c.OrderId);
+
+        modelBuilder.Entity<Order>()
+            .HasMany(c => c.OrderDetails)
+            .WithOne(c => c.Order)
+            .HasForeignKey(c => c.OrderId);
+
+        modelBuilder.Entity<Order>()
+            .Property(p => p.TotalAmount)
             .HasColumnType("money");
 
         base.OnModelCreating(modelBuilder);

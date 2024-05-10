@@ -2,7 +2,6 @@
 using Catalog.Service;
 using Ecommerce.Facade.Services;
 using Ecommerce.Service;
-using System.Threading.RateLimiting;
 
 namespace Catalog.API;
 
