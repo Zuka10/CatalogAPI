@@ -11,7 +11,7 @@ public class OrderController(IOrderService orderService) : ControllerBase
 {
     private readonly IOrderService _orderService = orderService;
 
-	[HttpGet]
+	[HttpGet("{id}")]
 	public async Task<IActionResult> Get(int id)
 	{
 		try
@@ -29,7 +29,7 @@ public class OrderController(IOrderService orderService) : ControllerBase
 	}
 
     [HttpPost]
-    public async Task<IActionResult> Create(OrderDTO orderModel)
+    public async Task<IActionResult> Create([FromForm] OrderDTO orderModel)
     {
 		try
 		{

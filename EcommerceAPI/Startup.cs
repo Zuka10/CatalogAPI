@@ -12,7 +12,9 @@ public class Startup(IConfiguration configuration)
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers();
+        services.AddControllers().AddNewtonsoftJson(options =>
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+        );
         services.AddDbContext<CatalogDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("MSSQLTest")));
         services.AddIdentity<IdentityUser, IdentityRole>()
