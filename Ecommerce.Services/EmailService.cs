@@ -1,4 +1,5 @@
-﻿using Catalog.Facade.Services;
+﻿using Catalog.Domain;
+using Catalog.Facade.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using System.Net;
@@ -6,10 +7,10 @@ using System.Net.Mail;
 
 namespace Catalog.Service;
 
-public class EmailService(IConfiguration configuration, UserManager<IdentityUser> userManager) : IEmailService
+public class EmailService(IConfiguration configuration, UserManager<ApplicationUser> userManager) : IEmailService
 {
     private readonly IConfiguration _configuration = configuration;
-    private readonly UserManager<IdentityUser> _userManager = userManager;
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
 
     public Task SendEmailAsync(string toEmail, string subject, string body, bool isBodyHTML)
     {
@@ -31,7 +32,7 @@ public class EmailService(IConfiguration configuration, UserManager<IdentityUser
         return client.SendMailAsync(mailMessage);
     }
 
-    public async Task SendConfirmationEmail(string email, IdentityUser user)
+    public async Task SendConfirmationEmail(string email, ApplicationUser user)
     {
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         var confirmationLink = $"https://localhost:7215/confirm-email?UserId={user.Id}&Token={token}";

@@ -1,12 +1,11 @@
 ﻿using Catalog.Domain;
 using Ecommerce.DTO;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Repository;
 
-public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : IdentityDbContext<IdentityUser>(options)
+public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : IdentityDbContext<ApplicationUser>(options)
 {
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
@@ -16,6 +15,8 @@ public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : Iden
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<Product>()
             .HasOne(c => c.Category)
             .WithMany(c => c.Products)
@@ -23,7 +24,7 @@ public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : Iden
 
         modelBuilder.Entity<Category>()
             .HasMany(c => c.Products)
-            .WithOne(c => c.Category)
+            .WithOne(c => c.Category) 
             .HasForeignKey(c => c.CategoryId);
 
         modelBuilder.Entity<Image>()
@@ -54,6 +55,10 @@ public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : Iden
             .Property(p => p.TotalAmount)
             .HasColumnType("money");
 
-        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<ApplicationUser>()
+                .HasMany(au => au.Orders)
+                .WithOne(o => o.User)
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
     }
 }
