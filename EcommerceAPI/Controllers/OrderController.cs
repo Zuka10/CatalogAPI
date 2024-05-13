@@ -1,17 +1,37 @@
 ﻿using Catalog.API.Models;
 using Catalog.Domain;
 using Catalog.Facade.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
+using Serilog;
 
 namespace Catalog.API.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/orders")]
 [ApiController]
+[Authorize]
+[EnableRateLimiting("fixed")]
 public class OrderController(IOrderService orderService, UserManager<ApplicationUser> userManager) : ControllerBase
 {
 	private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly IOrderService _orderService = orderService;
+
+	[HttpGet]
+	public async Task<IActionResult> GetAll()
+	{
+		try
+		{
+			var orders = await _orderService.GetAllAsync();
+			return Ok(orders);
+		}
+		catch (Exception e)
+		{
+            Log.Error(e.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+	}
 
 	[HttpGet("{id}")]
 	public async Task<IActionResult> Get(int id)
@@ -33,14 +53,15 @@ public class OrderController(IOrderService orderService, UserManager<Application
 
 			return Ok(response);
 		}
-		catch (Exception)
+		catch (Exception e)
 		{
-			throw;
-		}
+            Log.Error(e.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
 	}
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromForm] OrderDTO orderModel)
+    public async Task<IActionResult> Create(OrderDTO orderModel)
     {
 		try
 		{
@@ -49,22 +70,24 @@ public class OrderController(IOrderService orderService, UserManager<Application
             {
                 User = user,
                 UserId = user.Id,
-				OrderDetails = new List<OrderDetail>
+				OrderDetails = orderModel.OrderDetails.Select(od => new OrderDetail
 				{
-					new OrderDetail
-					{
-						ProductId = orderModel.ProductId,
-						Quantity = orderModel.Quantity
-					}
-				}
+					ProductId = od.ProductId,
+					Quantity = od.Quantity
+				}).ToList()
 			};
 
 			await _orderService.AddAsync(order);
 			return Ok();
 		}
-		catch (Exception)
+		catch (KeyNotFoundException)
 		{
-			throw;
+			return BadRequest("product not found");
 		}
+		catch (Exception e)
+		{
+            Log.Error(e.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
     }
 }

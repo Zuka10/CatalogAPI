@@ -40,7 +40,19 @@ public class OrderService(CatalogDbContext context, IProductService productServi
         {
             throw;
         }
-        
+    }
+
+    public Task UpdateAsync(int id, Order order)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<IEnumerable<Order>> GetAllAsync()
+    {
+        return await _context.Orders
+            .AsNoTracking()
+            .Include(o => o.OrderDetails)
+            .ToListAsync();
     }
 
     public async Task<Order> GetByIdAsync(int id)
