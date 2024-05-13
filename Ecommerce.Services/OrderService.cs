@@ -1,14 +1,16 @@
 ﻿using Catalog.Domain;
 using Catalog.Facade.Services;
 using Ecommerce.DTO;
+using Ecommerce.Facade.Services;
 using Ecommerce.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Service;
 
-public class OrderService(CatalogDbContext context) : IOrderService
+public class OrderService(CatalogDbContext context, IProductService productService) : IOrderService
 {
     private readonly CatalogDbContext _context = context;
+    private readonly IProductService _productService = productService;
 
     public async Task AddAsync(Order order)
     {
@@ -18,12 +20,21 @@ public class OrderService(CatalogDbContext context) : IOrderService
             Product product;
             foreach (var orderDetails in order.OrderDetails)
             {
-                product = await _context.Products.SingleOrDefaultAsync(p => p.Id == orderDetails.ProductId);
+                product = await _productService.GetByIdAsync(orderDetails.ProductId);
+                if (product is null)
+                    throw new KeyNotFoundException($"Product with ID {orderDetails.ProductId} not found.");
+
                 order.TotalAmount += product.UnitPrice * orderDetails.Quantity;
+
+                await _context.OrderDetails.AddAsync(orderDetails);
             }
 
             await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
+        }
+        catch(KeyNotFoundException) 
+        {
+            throw;
         }
         catch (Exception)
         {

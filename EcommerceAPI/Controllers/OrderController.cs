@@ -13,7 +13,7 @@ public class OrderController(IOrderService orderService, UserManager<Application
 	private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly IOrderService _orderService = orderService;
 
-	[HttpGet]
+	[HttpGet("{id}")]
 	public async Task<IActionResult> Get(int id)
 	{
 		try
