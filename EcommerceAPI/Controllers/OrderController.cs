@@ -1,4 +1,4 @@
-﻿using Catalog.API.Models;
+﻿using Catalog.API.DTOs;
 using Catalog.Domain;
 using Catalog.Facade.Services;
 using Microsoft.AspNetCore.Authorization;

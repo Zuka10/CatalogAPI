@@ -1,4 +1,4 @@
-﻿using Ecommerce.API.Models;
+﻿using Catalog.API.DTOs;
 using Ecommerce.DTO;
 using Ecommerce.Facade.Services;
 using Microsoft.AspNetCore.Authorization;
