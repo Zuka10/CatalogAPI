@@ -1,0 +1,30 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Ecommerce.DTO";
+
+message CategoryDTO {
+  int32 id = 1;
+  string name = 2;
+}
+
+service CategoryService {
+  rpc AddCategory(CategoryDTO) returns (IdRequest);
+  rpc DeleteCategory(DeleteRequest) returns (Empty);
+  rpc GetAllCategories(Empty) returns (CategoryList);
+  rpc GetCategoryById(IdRequest) returns (CategoryDTO);
+  rpc UpdateCategory(CategoryDTO) returns (Empty);
+}
+
+message Empty {}
+
+message IdRequest {
+  int32 id = 1;
+}
+
+message DeleteRequest {
+  int32 id = 1;
+}
+
+message CategoryList {
+  repeated CategoryDTO categories = 1;
+}
