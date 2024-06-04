@@ -1,7 +1,9 @@
 ﻿using Catalog.API;
 using Catalog.API.Middlewares;
 using Catalog.Domain;
+using Catalog.gRPCService;
 using Ecommerce.Repository;
+using Ecommerce.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +25,7 @@ public class Startup(IConfiguration configuration)
         services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<CatalogDbContext>()
                 .AddDefaultTokenProviders();
+        services.AddGrpc();
         services.AddAplicationServices();
         services.ConfigureCookies();
         services.ConfigureCors();
@@ -40,7 +43,6 @@ public class Startup(IConfiguration configuration)
         app.UseSwaggerUI();
         SerilogConfiguration.ConfigureSerilog();
         app.UseHttpsRedirection();
-
         app.UseStaticFiles();
         app.UseRouting();
         app.UseAuthentication();
@@ -49,6 +51,7 @@ public class Startup(IConfiguration configuration)
         app.UseRateLimiter();
         app.UseEndpoints(endpoints =>
         {
+            endpoints.MapGrpcService<CategorygRPCService>();
             endpoints.MapControllers().RequireRateLimiting("fixed");
         });
     }

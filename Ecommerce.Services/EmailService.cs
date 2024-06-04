@@ -43,7 +43,6 @@ public class EmailService(IConfiguration configuration, UserManager<ApplicationU
         }
         catch (Exception)
         {
-
             throw;
         }
     }
