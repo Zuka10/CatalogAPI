@@ -69,7 +69,7 @@ public class OrderController(IOrderService orderService, UserManager<Application
 			var order = new Order
             {
                 User = user,
-                UserId = user.Id,
+                UserId = user!.Id,
 				OrderDetails = orderModel.OrderDetails.Select(od => new OrderDetail
 				{
 					ProductId = od.ProductId,

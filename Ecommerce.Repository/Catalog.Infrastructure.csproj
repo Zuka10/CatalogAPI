@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Ecommerce.DTO\Catalog.Domain.csproj" />
-    <ProjectReference Include="..\Ecommerce.Facade\Catalog.Facade.csproj" />
+    <ProjectReference Include="..\Ecommerce.Facade\Catalog.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

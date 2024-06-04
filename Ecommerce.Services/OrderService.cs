@@ -16,14 +16,9 @@ public class OrderService(CatalogDbContext context, IProductService productServi
     {
         try
         {
-            ArgumentNullException.ThrowIfNull(order); 
-            Product product;
             foreach (var orderDetails in order.OrderDetails)
             {
-                product = await _productService.GetByIdAsync(orderDetails.ProductId);
-                if (product is null)
-                    throw new KeyNotFoundException($"Product with ID {orderDetails.ProductId} not found.");
-
+                Product product = await _productService.GetByIdAsync(orderDetails.ProductId) ?? throw new KeyNotFoundException($"Product with ID {orderDetails.ProductId} not found.");
                 order.TotalAmount += product.UnitPrice * orderDetails.Quantity;
 
                 await _context.OrderDetails.AddAsync(orderDetails);

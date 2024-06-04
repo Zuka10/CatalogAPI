@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ecommerce.Facade\Catalog.Facade.csproj" />
+    <ProjectReference Include="..\Ecommerce.Facade\Catalog.Interfaces.csproj" />
     <ProjectReference Include="..\Ecommerce.Repository\Catalog.Infrastructure.csproj" />
   </ItemGroup>
 
