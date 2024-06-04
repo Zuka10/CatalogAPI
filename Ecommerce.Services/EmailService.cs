@@ -19,6 +19,7 @@ public class EmailService(IConfiguration configuration, UserManager<ApplicationU
         string password = _configuration["EmailSettings:Password"]!;
         int port = int.Parse(_configuration["EmailSettings:MailPort"]!);
 
+
         var client = new SmtpClient(mailServer, port)
         {
             Credentials = new NetworkCredential(fromEmail, password),
@@ -34,9 +35,17 @@ public class EmailService(IConfiguration configuration, UserManager<ApplicationU
 
     public async Task SendConfirmationEmail(string email, ApplicationUser user)
     {
-        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        var confirmationLink = $"https://localhost:7215/confirm-email?UserId={user.Id}&Token={token}";
-        await SendEmailAsync(email, "Confirm Your Email", $"Please confirm your account by <a href='{confirmationLink}'>clicking here</a>;.", true);
+        try
+        {
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = $"https://localhost:7215/confirm-email?UserId={user.Id}&Token={token}";
+            await SendEmailAsync(email, "Confirm Your Email", $"Please confirm your account by <a href='{confirmationLink}'>clicking here</a>;.", true);
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
     }
 
     public async Task<string> ConfirmEmail(string userId, string token)

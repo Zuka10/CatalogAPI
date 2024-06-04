@@ -1,2 +1,4 @@
 {"Timestamp":"2024-05-08T11:35:50.4959534+04:00","Level":"Error","MessageTemplate":"error","TraceId":"6c5088dc9c4e0c345a897a7a61b34bfa","SpanId":"8988c6c3a36ee8d0"}
 {"Timestamp":"2024-05-08T11:35:50.5022878+04:00","Level":"Fatal","MessageTemplate":"fatal","TraceId":"6c5088dc9c4e0c345a897a7a61b34bfa","SpanId":"8988c6c3a36ee8d0"}
+{"Timestamp":"2024-06-04T14:21:49.2843327+04:00","Level":"Error","MessageTemplate":"Invalid column name 'UserId'.","TraceId":"d54a7766728c0a8ebbe1831e5d425ad4","SpanId":"8262156d8a95a46e"}
+{"Timestamp":"2024-06-04T14:23:09.4524197+04:00","Level":"Error","MessageTemplate":"Invalid column name 'UserId'.","TraceId":"efa2a82815c5475067385d66701b3f2a","SpanId":"b99630d6f5e0ad54"}

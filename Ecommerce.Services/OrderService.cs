@@ -27,7 +27,7 @@ public class OrderService(CatalogDbContext context, IProductService productServi
             await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
         }
-        catch(KeyNotFoundException) 
+        catch (KeyNotFoundException)
         {
             throw;
         }
