@@ -5,9 +5,9 @@ This project is an ASP.NET Web API built on .NET 8, following the principles of 
 The project is organized into several layers to ensure separation of concerns and maintainability:
 
 * Domain: Contains the core interfaces and entities.
-* Application: Contains the application logic, including services, use cases.
+* Application: Contains the application logic, including services, gRPC services, use cases.
 * Infrastructure: Contains the implementation details for data access, entity configurations, and other infrastructure concerns.
-* Presentation: Contains the API controllers and gRPC services to handle client requests.
+* Presentation: Contains the API controllers.
   
       Technologies Used
 * .NET 8
